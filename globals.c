@@ -20,9 +20,10 @@
 /************ word representations  *************/
 
 /* lexical and semantic lexica (for checks); index [-1] is used for blank */
-WORDSTRUCT lwords[MAXWORDS],	/* lexical words */
+WORDSTRUCT l1words[MAXWORDS],	/* L1 lexical words */
+  l2words[MAXWORDS],  /* L2 lexical words */
   swords[MAXWORDS];		/* semantic words */
-int nlwords, nswords,		/* number of lexical and semantic words */
+int nlwords, nswords,		/* number of lexical and semantic words - L1 and L2 should have same # of words */
   nlrep, nsrep;			/* dimension of lexical and semantic reps */
 int instances[MAXWORDS];	/* indices of the instance words */
 int ninstances;			/* number of instances */
@@ -35,14 +36,19 @@ int shuffletable[MAXPAIRS];	/* order of wordpair presentations */
 
 /***************** lexicon maps *****************/
 
-int nlnet, nsnet;		/* size (side) of lex and sem maps */
+int nlnet, nsnet;		/* size (side) of lex and sem maps; L1 L2 maps should have same sizes */
 
-FMUNIT lunits[MAXLSNET][MAXLSNET], /* lexical feature map */
+FMUNIT l1units[MAXLSNET][MAXLSNET], /* L1 feature map */
+  l2units[MAXLSNET][MAXLSNET], /* L2 feature map */
   sunits[MAXLSNET][MAXLSNET];	/* semantic feature map */
 
 double
-  lsassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* lex->sem assoc */
-  slassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; /* sem->lex assoc */
+  l1sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* L1->sem assoc */
+  sl1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; /* sem->L1 assoc */
+  l2sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* L2->sem assoc */
+  sl2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; /* sem->L2 assoc */
+  l1l2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* L1->L2 assoc */
+  l2l1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; /* L2->L1 assoc */
 
 
 /************ simulation management *************/
@@ -59,13 +65,16 @@ int ninprep[NMODULES],		/* input vector dimension */
 
 /* learning rates, neighborhoods, running */
 double
-  lex_alpha,			/* lexical map learning rate */
+  l1_alpha,			/* L1 map learning rate */
+  l2_alpha,     /* L2 map learning rate */
   sem_alpha,			/* semantic map learning rate */
   assoc_alpha;			/* associative connections learning rate */
 int
-  lex_nc,			/* lex neighborhood size */
+  l1_nc,			/* L1 neighborhood size */
+  l2_nc,      /* L2 neighborhood size */
   sem_nc,			/* sem neighborhood size */
-  lex_running,			/* whether lex is running this phase */
+  l1_running,			/* whether L1 is running this phase */
+  l2_running,     /* whether L2 is running this phase */
   sem_running,			/* whether sem is running this phase */
   assoc_running;		/* whether assoc is running this phase */
 
