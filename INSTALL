@@ -1,0 +1,68 @@
+Installing DISLEX
+=================
+
+DISLEX has been compiled and tested on the following platforms:
+* Sun Sparc (SunOS 4.1.3), cc/gcc
+* IBM RS/6000 (AIX 3.2.5), xlc/gcc
+* MIPS Ultrix 4.2A, cc/gcc
+* Linux Redhat 4.2, gcc
+
+If your platform is not one of those listed above, you should still be
+able to build it with little effort.  In general, you will need MIT
+X11R5 and a C compiler (ANSI or K&R).  The code is conditionalized so
+that it can be compiled with either ANSI C compiler (with prototypes) or
+with K&R C compiler. The code has not been tested with other versions of
+X windows (X11R6, OpenWindows).
+
+Feedback and suggestions on how to improve the system are welcome.
+
+
+Building DISLEX
+===============
+
+If you have xmkmf, type "xmkmf", then type "make".  Otherwise, edit
+"Makefile.noimake", copy to "makefile", and say "make".
+
+FM uses two extensions beyond standard C libraries: strcasecmp() and
+drand48(). You can get the code for strcasecmp() from NetBSD/FreeBSD
+distribution if your system doesn't include one (check at ftp sites near
+you or try gatekeeper.dec.com:/pub/BSD/NetBSD/NetBSD-current/src/lib/
+libc/string/strcasecmp.c). If you don't have drand48, you can use any
+other random number generator available in your system (such as rand();
+in main.c replace srand48 with srand, lrand48 with rand, and drand48()
+with rand()/32767.0 or rand()/2147483647.0 depending on the range of
+rand() in your system).
+
+
+Running DISLEX
+==============
+
+The distribution includes a number of simulation and input data files
+which are used at runtime. Please refer to "FILES" for description of
+each of these files, and to "USERDOC" for detailed instructions on how to
+run the system.
+
+The X application default file (called "Dislex.ad" in the distribution)
+should be installed somewhere in a systemwide app-default directory.
+The file should be renamed "Dislex". You can also install it in your
+home directory (or in $XAPPLRESDIR), or make it part of your .Xdefaults.
+
+DISLEX can be run with or without the graphics display. If it fails to
+open connection to your X display (or if you have so specified in the
+application defaults or the command line), it will fallback to the
+terminal mode with just text output. The graphics mode is useful for
+debugging and understanding what the network is doing. The terminal mode
+is useful when you want to train or test DISLEX in the background and do
+not care to see what is going on in real time.
+
+DISLEX can be run on a variety of X displays, including gray-scale and
+B&W. In most cases, it should come up with a reasonable graphics
+defaults without any changes.  However, in some cases you may need to
+set the resources manually in the application default file. You may want
+to replace the colors with black and white if you don't have color; you
+may want to use a private colormap if your display has few colors; you
+may want to slow down the display if your machine is very fast; and
+because the fonts are not scalable in X11R5, you may want to change them
+if your display size differs a lot from the default. The resources,
+defaults, and possible commandline options that override them are
+described in the file "Dislex.ad".

@@ -1,0 +1,353 @@
+Running DISLEX
+==============
+
+This directory contains the code and data for training and testing the
+DISLEX lexicon model. After you have successfully installed the system,
+say e.g. "dislex -test dislex1-simu" to see what it looks like. DISLEX
+will read simulation parameters and the network weights from the file
+"dislex1-simu". A graphics window will come up with a number of
+buttons. Click on "Run" to start the simulation: DISLEX will run through
+the word pairs in the file "dislex1-input-pairs". The graphics display
+will first show the image units for each word in dislex1-lreps and
+dislex1-sreps, and then the responses for each word in the input map and
+in the associative map. In the end, performance statistics are generated
+in the standard output.
+
+More generally, DISLEX is run with
+dislex [options] [simulation file] [input file]
+where the options are
+  -help                 Prints this message
+  -test                 Testing mode
+  -train                Training mode (default)
+  -npropunits <number>  Size of neighborhood (number of units)
+  -graphics             Bring up graphics display
+  -nographics           Text output only
+  -nearestlabels        Show nearest input for each unit
+  -nonearestlabels      Label only the image units
+  -owncmap              Use a private colormap
+  -noowncmap            Use the existing colormap
+  -delay <sec>          Delay in updating the screen (in seconds)
+
+DISLEX will come up in training mode by default. You can override it by
+giving the option -test in the command line. The meanings of the other
+options are described in detail below in conjunction with the different
+propagation choices and the graphics display parameters.
+
+If no filenames are specified on the command line, the file "simu" is
+used for the simulation specifications, and the inputfile specified in
+"simu" is taken to contain the input sentences. The first parameter is
+taken to be the simufilename, and second (if given) the inputfilename.
+
+
+Training DISLEX
+===============
+
+In training mode, DISLEX reads the simulation specifications (such as
+the number of units in the map, which networks are trained, how many
+epochs, learning rates, neighborhood sizes, snapshot epochs...) from the
+simulation file, the set of lexical and semantic representations from
+representation files, and the set of training pairs from the
+inputfile. The initial weights are set up randomly using the seed
+specified in the simufile, and the associative weights are then
+normalized.  The feature maps are then self-organized using the standard
+feature map adaptation based on Euclidian difference with "box"
+neighborhood function, and the associative connections are trained
+through Hebbian learning.
+
+Strategies
+----------
+The simulation run from epoch 1 to "simulationendepoch" (specified in
+the simufile) is divided into several phases with possibly different
+learning rates, neighborhood sizes, and different modules (lexical map,
+semantic map, and associative connections) to be trained. The idea is
+that you can train certain modules first and once they have converged,
+throw in others, or you can train them all at once. Or you can simply
+train the slower-learning modules longer. Note that if you specify that
+the associative connections should be trained but lexical or semantic
+maps should not, the inputs will still be presented to both maps so that
+the activity bubbles necessary for associative training can be obtained.
+
+The learning rates and neighborhood sizes are automatically linearly
+interpolated during the phase. You give the first epoch of each phase,
+and for each of these, you give the learning rate and neighborhood that
+will be used during that epoch. These settings will then linearly change
+towards the number specified under the next phase. This way the changes
+are more continuous than with fixed learning rates and neighborhoods for
+each phase. As usual with feature maps, the learning rates should start
+large and gradually decrease as the maps develop. The initial
+neighborhoods (specified in the simufile as max distance in x or y from
+the image unit) should cover almost the entire map.
+
+The neighborhoods can also be specified with -npropunits option. In this
+case, the given number of the most active units within the smallest
+nc-radius neighborhood is used for weight change. This part of code
+could be modified to implement an even finer neighborhood reduction
+where the number of units is gradually reduced (instead of the radius,
+which causes rather abrupt changes).
+
+DISLEX presents the training examples in different order in each epoch,
+unless you specify "shuffling 0" in the simulation file. This is useful
+because artificially-generated data often contains all variations of a
+particular type of input first before any of the other types, and the
+network would be liable to forget some of the early types in the epoch.
+
+For each pair, the lexical word is presented to the lexical map and the
+semantic word to the semantic map, the maps are self-organized within
+the current neighborhood, the activation values for both neighborhoods
+are calculated (scaled between 0 and 1 within the neighborhood), and the
+associative connections modified between all active units proportional
+to the activation of both ends (i.e. by Hebbian learning). The
+associative output weights of each units are then normalized to length
+1. Note that if you train the maps with 0 neighborhoods, i.e. only the
+maximally responding units, gradually the associative weights converge
+to only one active weight per association instead of local neighborhoods
+that give the dyslexic effects of the model.
+
+If you want to present e.g. a few extra copies of the same word on one
+of the maps to force it to separate it better, you can specify the
+associative word as "_" (underscore). This means that no word will be
+presented to the other map, and no associative connections are trained
+at that presentation.
+
+
+Architecture
+------------
+The above lreps, sreps and inputfile, simulationendepoch, running,
+phase-firstepoch, alpha, nc, shuffling, and seed parameters allow you to
+specify various training experiments for the lexicon system.  Your model
+is defined mostly by the code. The original code was written so that it
+should be fairly modular and easy to modify. When you make
+modifications, it is a good idea to use the graphics display to debug
+your model. Also after each modification, run a performance check on
+some training and testing data that you know well and know what the
+output should be. This way you can catch many errors early on and keep
+the debugging manageable.
+
+In the simulation file, you can change the size of the feature maps by
+changing the corresponding values in the simufile.  If you accidentally
+exceed the table dimensions specified in the code, it should catch the
+problem and give you a warning, and you can then change the table limits
+in the code.
+
+Snapshots
+---------
+The training results are saved in the simufile. Snapshots of feature map
+and associative weights are appended at the end of the simulation file
+after each epoch that you specify in the "snapshotepochs" list.  All
+weights are saved at each snapshot even if the network is not currently
+running. In the beginning of each snapshot definition, the epoch and the
+average error per representation component for each module are given
+(i.e. how close the weights of the image unit are to the current input
+on the average).
+
+If you interrupt the simulation before its endepoch, you can continue
+from the last saved snapshot. Given the simufile, DISLEX reads all
+snapshots, restores the state of the simulation, and continues from
+there.
+
+Running the simulation
+----------------------
+Usually (at least for the first few times) it is a good idea to check on
+screen that your simulation setup really works. Then you can turn the
+display off and do the training in the background. While it is running,
+the snapshots are saved in the simufile, and you can test them as they
+come in. You don't necessarily need the graphics for this, and DISLEX
+allows you to train and test even when the display is unspecified (you
+can e.g. do it remotely from a non-X terminal).
+
+The idea is that the simufile should be a complete record of the
+training simulation. It does not have to, and should not, be changed for
+testing.  Although you can override some of the simulation parameters
+(e.g. neighborhoods with -npropunits) by command-line options during
+training, it is not a good idea to do so because no record of it remains
+in the simulation file and it may be difficult to remember how the file
+in front of you was actually created. If you doctor the simufile after
+it was created, it is a good idea to include comments about it in the
+simufile.
+
+As the simulation is running, the average error per output unit for each
+module in the system (in the order lexical input map, associative
+semantic map, semantic input map, and associative lexical map) is
+printed in the standard output at each epoch so you can follow how the
+learning is progressing.  Note however that the associative map errors
+are zero because there is no propagation during training, just Hebbian
+learning between the bubbles. The simulations switches in use are also
+printed out in the beginning, so that the output contains a record of
+possible options as well.
+
+
+Testing DISLEX
+==============
+
+In test mode (specified by -test option), the system runs through the
+same procedures as in training, except the weights are not changed, and
+if associative connections are running during current epoch, DISLEX
+actually propagates through the associative connections to the output
+map. More detailed statistics about the system performance is collected
+and output, including statistics about the accuracy of the associative
+output representations, and separate statistics for words specified as
+instance words (see DISCERN or PROC).
+
+The propagation neighborhoods can be specified in two ways. If
+-npropunits option is given, that number of most active units within the
+smallest nc-neighborhood that contains that many units is used for
+propagation. Without that option, the nc-neighborhood specified for the
+current epoch is used. Note that for DISCERN, the neighborhood should be
+specified as -npropunits 4 (four most active units in the immediate
+neighborhood).
+
+In a test simulation, DISLEX reads each snapshots one at a time and runs
+all pairs in the input file through the network (without shuffling).
+The lexical word is presented to the lexical map, the activation pattern
+is formed, and activity is propagated to the semantic map. Then the
+semantic word is presented to the semantic map and associated to the
+lexical map.  Again, if you want to just test the accuracy of one map,
+give "_" as the other word in the pair.
+
+Statistics of the accuracy of each map representation is collected
+separately for each module: (1) the weights of the lexical image, (2)
+those of the semantic associative unit, (3) the semantic image, (4) the
+lexical associative unit.  Separately for each of these, the percentage
+of correctly-identifyable words (out of all words), the percentage of
+correctly identifyable instances, percentage of output components within
+0.15 of the correct value, and the average error per output component is
+printed. The instance list was necessary for DISCERN where instances are
+special; in general, it allows you to focus to some subset of the words
+by collecting separate statistics for them.
+
+In the beginning, the file names and the simulation switches are printed
+in the standard output, so that the test simulation can always be
+recreated from the output information.
+
+
+Graphics Display
+================
+
+Although in principle it is enough to train and test the networks
+without graphics, the graphics display is often indispensable for
+debugging the model and understanding what is actually going on. If your
+model is not learning, put it on screen; you may be surprised what you
+can find out that way.
+
+Whether the graphics display is brought up depends on what you have
+defined in the application defaults for "Dislex*bringupdisplay". If it
+is "true", DISLEX will come up with graphics, otherwise without it. If
+no application defaults file can be found, DISLEX will come up with
+graphics. You can override the application defaults by specifying
+-graphics or -nographics in the command line. If you don't have X11, you
+can still run DISLEX remotely (without graphics) on another machine that
+does (which is sometimes useful for starting simulations remotely).
+
+The display shows the image units for each word, the nearest input word
+in the data set for each unit, the unit activations, the current output
+error for each network, and allows you to see associative connections by
+clicking on a unit. On top of the display there are a number of buttons
+that control the run:
+
+Buttons
+-------
+"Run": click here and DISLEX will start a simulation run, reading input
+ from the input file listed at right. If the training has been completed,
+ "Run" has no effect; if testing a snapshotfile has been completed,
+ hitting "Run" will run the same tests again. While the simulation is
+ running, the "Run" button changes into a "Stop" button:
+
+"Stop"; you can interrupt the run at any time by clicking on the "Stop"
+ button, and it changes to the "Run" button. Click "Run" again and the
+ simulation continues.
+
+"Step" is a toggle switch; when on, it causes PROC to pause after
+ every major propagation in the network. Click "Run" to continue.
+
+"Clear" interrupts the currently running simulation and clears the
+ network activations. After hitting "Run", the simulation file is read in
+ again and the simulation continues from the current state of the
+ simulation file.
+
+"Quit" terminates the program.
+
+Network displays
+----------------
+The green labels on the lexical and semantic map units (boxes) indicate
+the maximally responding units for each word in the data. If you gave
+the -nearestlabels option (or specified "Dislex*nearestlabels true" in
+the application defaults and did not give -nonearestlabels), each unit
+also has a red label on top. This indicates that input word which is
+closest to the weight vector of the unit. These labels are set up once
+in the beginning of each simulation and reflect the state of the network
+at that time. If a label does not fit the box it is truncated at right.
+Some units may have several labels. If they do not all fit in the box, a
+label "more.." is given at the bottom indicating that there are other
+labels that are not shown. Increase the size of the network and they
+will come out in the beginning of the next epoch.
+
+The unit activations range between 0.0 and 1.0 and are coded with black
+(0.0) - red (0.333) - yellow (0.667) - white (1.0).  Gray-scale from
+black to white indicates the same values in B&W displays.  If you gave
+the -npropunits option, the responses are shown for all units of the
+smallest radius that contains at least the given number of units.
+Otherwise, the responses are shown for the units in the current Nc
+neighborhood. The responses of these units are scaled between 0.0 and
+1.0, where the lowest activation gets a 0.0 and the highest gets 1.0, in
+a sense approximating the idea of a localized activity bubble on the
+map.
+
+The label at
+top left of the window indicates the word to which the currently
+maximally responding unit is closest.  If this word is not the same as
+the target word (i.e. the output is wrong), the target word is given in
+parenthesis (e.g. "*boy(girl)*"). The output line also indicates 
+whether this map is currently used as the input or associative map, and
+also prints the current error of the output representation.
+
+Interactive display of associative weights
+------------------------------------------
+There are too many associative weights to be displayed all at once. You
+can examine the weights of any particular unit by clicking it with the
+mouse. That unit will be turned on (made white), and the color coding in
+the other map shows the strengths of the associative weights to each
+unit. The log line on top left also indicates the current closest word
+for both the source unit and target unit with the largest associative
+weight.
+
+Resources
+---------
+The display interacts with the X system in the normal manner. You can
+iconize the display, resize it, change the default parameters in the
+app-defaults or .Xdefaults file, use the standard X Toolkit options,
+abbreviate the options, etc. A few comments on the more important
+resources (look in the file Dislex.ad for more details):
+
+The nearestlabel display can be turned on or off by toggling the
+"Dislex*nearestlabel" resource in the app-defaults (or .Xdefaults) file.
+You can override it by specifying -nearestlabels or -nonearestlabels in
+the command line.
+
+Unfortunately the fonts are not resizable in X11R5. If the display size
+changes a lot, you may have to specify other fonts in the app-defaults
+file. Also, if your display has few available colors, it may be a good
+idea to set "Dislex*owncmap" to "true"; in this case, DISLEX will come
+up with a complete, private colormap instead of using whatever colors it
+can get (this resource may be overridden with -owncmap and -noowncmap
+options). Lastly, on some fast machines you may actually want to slow
+down the display. You can do that with "Dislex*delay" with a given
+number of seconds, or using the -delay command-line option.
+
+
+Credits etc.
+============
+
+Copyright (C) 1994,1997,1998,1999 Risto Miikkulainen
+
+This software can be copied, modified and distributed freely for
+educational and research purposes, provided that this notice is included
+in the code, and the author is acknowledged in any materials and reports
+that result from its use. It may not be used for commercial purposes
+without expressed permission from the author.
+
+We hope that this software will be a useful starting point for your own
+explorations in connectionist NLP. The software is provided as is,
+however, we will do our best to maintain it and accommodate
+suggestions. If you want to be notified of future releases of the
+software or have questions, comments, bug reports or suggestions, send
+email to discern@cs.utexas.edu.

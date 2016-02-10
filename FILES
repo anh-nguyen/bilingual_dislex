@@ -1,0 +1,156 @@
+The DISLEX software package
+===========================
+
+This directory contains the training and testing code and data for the
+DISLEX model of the lexicon. The software consists of three main
+components: (1) the C code for the simulation management, networks, and
+graphics, (2) the input data files, and (3) example simulation
+specification and output files.  The input data and simulation files are
+provided for both the DISCERN orthographic lexicon and the smaller but
+more complete DISLEX example with phonological maps as well. This file
+contains an overview of all of these.  For more detailed explanations,
+see the comments in the individual files themselves.
+
+
+Code
+----
+defs.h
+Definitions of the global data types and constants. The network weights
+and activities and the input data are stored in fixed-size tables whose
+max dimensions are hardcoded as compiler constants. If you design your own
+data and accidentally exceed the max table sizes DISLEX should be able to
+catch it and give a warning (and you can then change the table limits in
+this file to fit your data).
+
+prototypes.h
+Prototype definitions for global functions.
+
+globals.c
+The global variables including network dimensions, weights, and activities,
+input data, file names, simulation parameters and major graphics structures
+are defined here.
+
+gwin.c, Gwin.h, GwinP.h
+Defines a simple window widget for graphics output.
+
+main.c
+Initialization of the X interface, networks, and input data. The main
+training and testing loops. The input word pairs are given as text;
+However, when the input is read in, it is converted into index
+representation where every word is represented by an index to a table of
+representations.
+
+nets.c
+Simulation code for the feature maps and associative connections:
+presenting to the map, associative propagation, map self-organization,
+Hebbian learning of associative connections, input and target
+initialization, weight initialization.
+
+stats.c
+Performance statistics initialization, collecting, and printing routines.
+
+graph.c
+X window graphics: initialization, event handling loop, callbacks for
+simulation control buttons, colormap allocation, displaying network
+activities and weights, handling mouse events, resizing.
+
+
+Input data files
+----------------
+
+Input data is provided for two experiments: (1) the DISCERN lexicon,
+which contains orthographic and semantic maps only and has a large
+vocabulary (see "Subsymbolic NLP" book Ch.10 for details), and (2) the
+DISLEX model, which contains both orthographic and phonological maps,
+smaller vocabulary, and ambiguous mappings between symbols and concepts
+(see the Brain and Languge paper for details). The DISLEX model actually
+consists of two separate simulations: in DISLEX-1, the orthographic map
+and associative connections were self-organized together with the
+semantic map, and in DISLEX-2, the phonological map and associative
+connections with the same semantic map.
+
+discern-lreps, discern-sreps
+The lexical and semantic word representations for the DISCERN system.
+These files have otherwise the same content as lreps and sreps in the
+DISCERN package, but the script representations ($restaurant, $fast-food...)
+have been removed from discern-sreps.
+
+discern-input-pairs
+The mappings between lexical and semantic words in the DISCERN
+vocabulary. In this particular data, there are no ambiguities, and the
+symbols map concepts one-to-one. This data was used to develop the
+lexicon for DISCERN.
+
+dislex-sreps
+The semantic word representations for the DISLEX model, developed by
+FGREPNET in the case-role assignment task based on the McClelland and
+Kawamoto data (from the "Parallel Distributed Processing", McClelland
+and Rumelhart (eds) book, MIT Press 1986): the words that were used in
+identical ways in the original data (like MAN, WOMAN, BOY, GIRL) were
+replaced with a single word (human) in the training sentences for
+FGREPNET.
+
+dislex1-lreps, dislex2-lreps
+The orthographic and phonological representations of the DISLEX model.
+The orthographic representations were constructed based on the Geneva
+font, like in DISCERN. The phonological representations were formed
+based on the IPA representations of the phonemes.
+
+dislex1-input-pairs, dislex2-input-pairs
+The mappings between orthographic symbols and semantic words, and
+between phonological symbols and semantic words.  These mappings contain
+several ambiguities, such as CHICKEN -> food, prey and human -> MAN,
+WOMAN, BOY, GIRL. The data was derived from the McClelland and Kawamoto
+PDP article by making the ambiguities explicit.
+
+
+Simulation files
+----------------
+In addition to the application defaults file, two sets of files are
+provided: those for DISCERN and those for DISLEX.
+
+Dislex.ad
+This is the X application default file. It defines a number of
+parameters for the X display such as the graphics dimensions, colors and
+fonts. This file should be placed in the app-defaults directory or
+user's home directory (in which case it should be renamed "Dislex") or
+included in the user's .Xdefaults file.
+
+discern-simu
+The simulation specification file for forming the DISCERN lexicon. The
+simulation parameters are defined here and the results (snapshots of the
+feature map and associative weights) are stored in the end. The file
+specifies e.g. what lexical and semantic representation file and what
+inputfile to use, how large the maps are, which modules to train and how
+long, when to save snapshots, and what learning rates and neighborhood
+sizes to use.  Each snapshot is stored at the end of the simufile, and
+consists of the snapshot epoch, current error for each network (and
+direction), and the current weights for both maps and associative
+connections.  The idea is that the simufile is a complete record of one
+training session. The resulting network can then be tested in different
+ways without having to edit the simulation file. In this example, only
+one snapshot was saved at the end of the simulation.  You can delete the
+snapshot and change the parameters to specify your own experiments.
+
+discern-output-test
+The output of "dislex -test -npropunits 4 discern-simu", it shows the
+performance statistics of the DISCERN lexicon. Note that for DISCERN,
+4-unit propagation neighborhoods are specified.
+
+dislex1-simu, dislex2-simu
+The simulation specification files for the DISLEX model: dislex1 is for
+the orthographic simulation, and dislex2 for the phonological. These
+files have the same information as discern-simu, but specify different
+representation files and inputfiles, and thereby result in different
+models (however, the semantic map is the same in both, together forming
+the full DISLEX model). The files only contain the last snapshot which
+you can delete and modify to form the specifications for your own
+model. (Note that if you rerun the experiments, you may not get an
+exactly identical snapshot, because it was created with a different
+random number generator, but your results should be very similar.)
+
+dislex1-output-test, dislex2-output test
+The output of "dislex -test dislex1-simu" and "dislex -test
+dislex2-simu", these files show the performance statistics of the DISLEX
+model. Because this data shows many ambiguities, the statistics are not
+as meaningful as the graphics display.

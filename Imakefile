@@ -1,0 +1,10 @@
+
+        DEPLIBS = XawClientDepLibs
+LOCAL_LIBRARIES = XawClientLibs
+  SYS_LIBRARIES = -lm
+           SRCS = globals.c main.c nets.c stats.c graph.c gwin.c
+           OBJS = main.o nets.o stats.o graph.o gwin.o
+
+ComplexProgramTarget(dislex)
+InstallAppDefaults(Dislex)
+

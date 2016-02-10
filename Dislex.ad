@@ -1,0 +1,67 @@
+!
+! Dislex.ad --- the app-defaults file for DISLEX.
+!
+! Each resource is described below, the default value (the one used if
+! the resource is not specified in this file) is given, and where
+! applicable, the command line options that override the app-defaults 
+! value are listed.
+!
+! $Id: Dislex.ad,v 1.4 1994/09/20 11:06:15 risto Exp risto $
+!
+! General display settings
+! ------------------------
+! Dislex*bringupDisplay:true	Whether to bring up the graphics display
+! -graphics -nographics		or run DISLEX in terminal mode.
+! Dislex*nearestlabels:	false	Whether to list the nearest input vector
+! -nearestlabels -nonearestlabels for each map unit
+! Dislex*owncmap: 	false	Whether to allocate colors using a private
+! -owncmap -noowncmap		colormap (useful when colors need to be exact).
+! Dislex*delay:		0	Number of seconds each major propagation 
+!  -delay <sec>			display is delayed (useful when the display
+!				is really fast). Must be an integer.
+! Dimensions
+! ----------
+! Dislex*netwidth:	768	Width of the network displays in pixels.
+! Dislex*lexnetheight:	348	Height of the lexical feature map display.
+! Dislex*semnetheight:	348	Height of the semantic feature map display.
+!
+! Colors
+! ------
+! Dislex*foreground:	yellow	Display foreground (for the buttons),
+! Dislex*background:	black	background (everywhere), and
+! Dislex*borderColor:	Goldenrod border colors.
+! Dislex*textColor:	green	All text on the displays is in this color.
+! Dislex*netColor:	red	The network assembly outline color.
+! Dislex*reversevalue:	0.3	Reverse the labelcolor if higher activation.
+!
+! Fonts
+! -----
+! Dislex*commandfont:	7x13bold Text on the buttons on top of the display.
+! Dislex*titlefont:	8x13bold Font for the titles of the networks.
+! Dislex*logfont:	6x10	 Log line (current error etc.)
+! Dislex*lexfont:	5x8	 Labels on the lexical map.
+! Dislex*semfont:	5x8	 Labels on the semantic map.
+!
+! The actual definitions begin here.
+!
+Dislex*bringupDisplay:	true
+Dislex*nearestlabels:	false
+Dislex*owncmap:		false
+Dislex*delay:		0
+!
+Dislex*netwidth:	768
+Dislex*lexnetheight:	348
+Dislex*semnetheight:	348
+!
+Dislex*foreground:	yellow
+Dislex*background:	black
+Dislex*borderColor:	Goldenrod
+Dislex*textColor:	green
+Dislex*netColor:	red
+Dislex*reversevalue:	0.3
+!
+Dislex*commandfont:	7x13bold
+Dislex*titlefont:	8x13bold
+Dislex*logfont:	6x10
+Dislex*lexfont:	5x8
+Dislex*semfont:	5x8

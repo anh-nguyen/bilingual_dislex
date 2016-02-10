@@ -1,0 +1,13 @@
+Initializing DISLEX simulation from discern-simu...
+Reading lexical representations from discern-lreps...106 reps.
+Reading semantic representations from discern-sreps...106 reps (38 instances).
+Reading word pairs from discern-input-pairs...106 pairs.
+Simulation switches: -test -npropunits 4
+System initialization complete.
+
+discern-input-pairs (106 pairs), epoch 500
+Module        All   Inst  <0.15    AvgErr
+Module  0:  100.0  100.0    0.0    0.0000
+Module  1:  100.0  100.0    0.0    0.0002
+Module  2:  100.0  100.0    0.0    0.0002
+Module  3:  100.0  100.0    0.0    0.0000
