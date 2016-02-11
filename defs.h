@@ -30,7 +30,7 @@
 #define MAXSTRL 1000		/* max length of input lines (chars) */
 
 /* system constants (not maxsize but actual size) */
-#define NMODULES 4		/* lex and sem output and input */
+#define NMODULES 6		/* lex and sem output and input */
 
 /*********** module, parameter, return, and range constants *************/
 
@@ -38,11 +38,14 @@
    data such as input/output activation, weights, graphics values are kept.
    The processing modules need to be consequtive before memory modules,
    which can appear in any order */
-#define LINPMOD 0		/* module # for lexical input map  */
-#define SOUTMOD 1		/* module # for semantic output map  */
-#define SINPMOD 2		/* module # for semantic input map  */
-#define LOUTMOD 3		/* module # for lexical output map  */
-#define LEXWINMOD LINPMOD	/* module # for lex window */
+#define L1INPMOD 0		/* module # for L1 input map  */
+#define L2INPMOD 1   /* module # for L2 input map  */
+#define SOUTMOD 2		/* module # for semantic output map  */
+#define SINPMOD 3		/* module # for semantic input map  */
+#define L1OUTMOD 4		/* module # for L1 output map  */
+#define L2OUTMOD 5    /* module # for lexical output map  */
+#define L1WINMOD L1INPMOD	/* module # for L1 window */
+#define L2WINMOD L2INPMOD  /* module # for lex window */
 #define SEMWINMOD SINPMOD	/* module # for sem window */
 
 /* initialization, index, return code constants */
@@ -93,7 +96,7 @@ FMUNIT;
    and the corresponding semantic word */
 typedef struct PAIRSTRUCT
   {
-    int lindex, sindex;
+    int l1index, l2index, sindex;
   }
 PAIRSTRUCT;
 

@@ -97,7 +97,8 @@ iterate_pairs ()
 /* iterate through all pairs; present to maps, propagate, change weights */
 {
   /* propagation through these units */
-  LEXPROPUNIT lprop[MAXLSNET * MAXLSNET],
+  LEXPROPUNIT l1prop[MAXLSNET * MAXLSNET],
+    l2prop[MAXLSNET * MAXLSNET],
     sprop[MAXLSNET * MAXLSNET];
   int pairi,				/* word pair counter */
     nlprop, nsprop;			/* lex and sem number of prop units */

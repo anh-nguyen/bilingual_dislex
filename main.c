@@ -33,25 +33,31 @@
 #define APP_CLASS "Dislex"		/* class of this application */
 #define DEFAULT_SIMUFILENAME "simu"	/* simulation file */
 #define SEMANTIC_KEYWORD "semantic"	/* name of semantic reps */
-#define LEXICAL_KEYWORD "lexical"	/* name of lexical reps */
+#define L1_KEYWORD "l1"	/* name of L1 reps */
+#define L2_KEYWORD "l2" /* name of L2 reps */
 
 /* keywords in the simulation specification file */
 #define SIMU_INPUTFILE "inputfile"
-#define SIMU_LREPFILE "lrepfile"
+#define SIMU_L1REPFILE "l1repfile"
+#define SIMU_L2REPFILE "l2repfile"
 #define SIMU_SREPFILE "srepfile"
-#define SIMU_LMAPSIZE "lmapsize"
+#define SIMU_L1MAPSIZE "l1mapsize"
+#define SIMU_L2MAPSIZE "l2mapsize"
 #define SIMU_SMAPSIZE "smapsize"
 #define SIMU_SEED "seed"
 #define SIMU_SHUFFLING "shuffling"
 #define SIMU_SIMULATIONENDEPOCH "simulationendepoch"
 #define SIMU_SNAPSHOTEPOCHS "snapshotepochs"
 #define SIMU_PHASE_FIRSTEPOCHS "phase-firstepochs"
-#define SIMU_LEX_ALPHAS "lex-alphas"
+#define SIMU_L1_ALPHAS "l1-alphas"
+#define SIMU_L2_ALPHAS "l2-alphas"
 #define SIMU_SEM_ALPHAS "sem-alphas"
 #define SIMU_ASSOC_ALPHAS "assoc-alphas"
-#define SIMU_LEX_NCS "lex-ncs"
+#define SIMU_L1_NCS "l1-ncs"
+#define SIMU_L2_NCS "l2-ncs"
 #define SIMU_SEM_NCS "sem-ncs"
-#define SIMU_LEX_RUNNING "lex-running"
+#define SIMU_L1_RUNNING "l1-running"
+#define SIMU_L2_RUNNING "l2-running"
 #define SIMU_SEM_RUNNING "sem-running"
 #define SIMU_ASSOC_RUNNING "assoc-running"
 #define SIMU_EPOCH "epoch"
@@ -147,13 +153,16 @@ static int nphase,		/* number of phases */
   nsnaps,			/* number of snapshots */
   nextsnapshot;			/* index of the next snapshot */
 static double
-  l_a[MAXPHASE + 1], *lex_alphas, 	/* lexmap alphas for each phase */
+  l1_a[MAXPHASE + 1], *l1_alphas, 	/* L1 alphas for each phase */
+  l2_a[MAXPHASE + 1], *l2_alphas,   /* L2 alphas for each phase */
   s_a[MAXPHASE + 1], *sem_alphas,	/* semmap alphas for each phase */
   a_a[MAXPHASE + 1], *assoc_alphas;	/* assoc alphas for each phase */
 static int
-  l_n[MAXPHASE + 1], *lex_ncs,	/* lex neighborhood sizes per phase */
+  l1_n[MAXPHASE + 1], *l1_ncs,	/* L1 neighborhood sizes per phase */
+  l2_n[MAXPHASE + 1], *l2_ncs,  /* L2 neighborhood sizes per phase */
   s_n[MAXPHASE + 1], *sem_ncs,	/* sem neighborhood sizes per phase */
-  lex_runnings[MAXPHASE],	/* whether lex is running this phase */
+  l1_runnings[MAXPHASE],	/* whether L1 is running this phase */
+  l2_runnings[MAXPHASE],  /* whether L2 is running this phase */
   sem_runnings[MAXPHASE],	/* whether sem is running this phase */
   assoc_runnings[MAXPHASE];	/* whether assoc is running this phase */
 
@@ -693,10 +702,12 @@ init_system ()
      values under index -1 */
   phaseends = _phaseends + 1;
   phaseends[-1] = 0;
-  lex_alphas = l_a + 1;
+  l1_alphas = l1_a + 1;
+  l2_alphas = l2_a + 1;
   sem_alphas = s_a + 1;
   assoc_alphas = a_a + 1;
-  lex_ncs = l_n + 1;
+  l1_ncs = l1_n + 1;
+  l2_ncs = l2_n + 1;
   sem_ncs = s_n + 1;
 
   /* read simulation parameters from simufile */
@@ -706,7 +717,8 @@ init_system ()
   fclose (fp);
 
   /* read the lexical reps */
-  reps_init (LEXICAL_KEYWORD, lrepfile, lwords, &nlwords, &nlrep);
+  reps_init (L1_KEYWORD, l1repfile, l1words, &nl1words, &nl1rep);
+  reps_init (L2_KEYWORD, l2repfile, l2words, &nl2words, &nl2rep);
 
   /* read the semantic reps */
   reps_init (SEMANTIC_KEYWORD, srepfile, swords, &nswords, &nsrep);
@@ -720,8 +732,10 @@ init_system ()
   printf ("%d pairs.\n", npairs);
 
   /* set up numbers of input/output words and reps for convenience */
-  ninprep[LINPMOD] = noutrep[LINPMOD] = nlrep;
-  ninprep[LOUTMOD] = noutrep[LOUTMOD] = nlrep;
+  ninprep[L1INPMOD] = noutrep[L1INPMOD] = nl1rep;
+  ninprep[L1OUTMOD] = noutrep[L1OUTMOD] = nl1rep;
+  ninprep[L2INPMOD] = noutrep[L2INPMOD] = nl2rep;
+  ninprep[L2OUTMOD] = noutrep[L2OUTMOD] = nl2rep;
   ninprep[SINPMOD] = noutrep[SINPMOD] = nsrep;
   ninprep[SOUTMOD] = noutrep[SOUTMOD] = nsrep;
 
@@ -761,17 +775,28 @@ read_params (fp)
   if (!strlen(current_inpfile))
     fscanf (fp, "%s", current_inpfile);
 
-  read_till_keyword (fp, SIMU_LREPFILE, REQUIRED);
-  fscanf (fp, "%s", lrepfile);
+  read_till_keyword (fp, SIMU_L1REPFILE, REQUIRED);
+  fscanf (fp, "%s", l1repfile);
+
+  read_till_keyword (fp, SIMU_L2REPFILE, REQUIRED);
+  fscanf (fp, "%s", l2repfile);
 
   read_till_keyword (fp, SIMU_SREPFILE, REQUIRED);
   fscanf (fp, "%s", srepfile);
 
-  read_till_keyword (fp, SIMU_LMAPSIZE, REQUIRED);
-  fscanf (fp, "%d", &nlnet);
-  if (nlnet > MAXLSNET || nlnet <= 0)
+  read_till_keyword (fp, SIMU_L1MAPSIZE, REQUIRED);
+  fscanf (fp, "%d", &nl1net);
+  if (nl1net > MAXLSNET || nlnet <= 0)
     {
-      fprintf (stderr, "%s exceeds array size\n", SIMU_LMAPSIZE);
+      fprintf (stderr, "%s exceeds array size\n", SIMU_L1MAPSIZE);
+      exit (EXIT_SIZE_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_L2MAPSIZE, REQUIRED);
+  fscanf (fp, "%d", &nl2net);
+  if (nl2net > MAXLSNET || nlnet <= 0)
+    {
+      fprintf (stderr, "%s exceeds array size\n", SIMU_L2MAPSIZE);
       exit (EXIT_SIZE_ERROR);
     }
 
@@ -825,12 +850,21 @@ read_params (fp)
     phaseends[i -1] = begphase[i] - 1;
   nphase = nbegphase -1;
 
-  read_till_keyword (fp, SIMU_LEX_ALPHAS, REQUIRED);
+  read_till_keyword (fp, SIMU_L1_ALPHAS, REQUIRED);
   fgetline (fp, rest, MAXSTRL);
-  if (text2floats (&lex_alphas[-1], MAXPHASE + 1, rest) != nphase + 1)
+  if (text2floats (&l1_alphas[-1], MAXPHASE + 1, rest) != nphase + 1)
     {
       fprintf (stderr, "Number of %s does not match the number of phases\n",
-	       SIMU_LEX_ALPHAS);
+	       SIMU_L1_ALPHAS);
+      exit (EXIT_DATA_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_L2_ALPHAS, REQUIRED);
+  fgetline (fp, rest, MAXSTRL);
+  if (text2floats (&l2_alphas[-1], MAXPHASE + 1, rest) != nphase + 1)
+    {
+      fprintf (stderr, "Number of %s does not match the number of phases\n",
+         SIMU_L2_ALPHAS);
       exit (EXIT_DATA_ERROR);
     }
 
@@ -852,12 +886,21 @@ read_params (fp)
       exit (EXIT_DATA_ERROR);
     }
 
-  read_till_keyword (fp, SIMU_LEX_NCS, REQUIRED);
+  read_till_keyword (fp, SIMU_L1_NCS, REQUIRED);
   fgetline (fp, rest, MAXSTRL);
-  if (text2ints (&lex_ncs[-1], MAXPHASE + 1, rest) != nphase + 1)
+  if (text2ints (&l1_ncs[-1], MAXPHASE + 1, rest) != nphase + 1)
     {
       fprintf (stderr, "Number of %s does not match the number of phases\n",
-	       SIMU_LEX_NCS);
+	       SIMU_L1_NCS);
+      exit (EXIT_DATA_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_L2_NCS, REQUIRED);
+  fgetline (fp, rest, MAXSTRL);
+  if (text2ints (&l2_ncs[-1], MAXPHASE + 1, rest) != nphase + 1)
+    {
+      fprintf (stderr, "Number of %s does not match the number of phases\n",
+         SIMU_L2_NCS);
       exit (EXIT_DATA_ERROR);
     }
 
@@ -870,12 +913,21 @@ read_params (fp)
       exit (EXIT_DATA_ERROR);
     }
 
-  read_till_keyword (fp, SIMU_LEX_RUNNING, REQUIRED);
+  read_till_keyword (fp, SIMU_L1_RUNNING, REQUIRED);
   fgetline (fp, rest, MAXSTRL);
-  if (text2ints (lex_runnings, MAXPHASE, rest) != nphase)
+  if (text2ints (l1_runnings, MAXPHASE, rest) != nphase)
     {
       fprintf (stderr, "Number of %s does not match the number of phases\n",
-	       SIMU_LEX_RUNNING);
+	       SIMU_L1_RUNNING);
+      exit (EXIT_DATA_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_L2_RUNNING, REQUIRED);
+  fgetline (fp, rest, MAXSTRL);
+  if (text2ints (l2_runnings, MAXPHASE, rest) != nphase)
+    {
+      fprintf (stderr, "Number of %s does not match the number of phases\n",
+         SIMU_L2_RUNNING);
       exit (EXIT_DATA_ERROR);
     }
 
@@ -908,7 +960,8 @@ read_input_pairs (fp)
 {
   int i = 0;
   char rest[MAXSTRL + 1],	/* holds one line of input data */
-  lword[MAXSTRL + 1],		/* lexical word read */
+  l1word[MAXSTRL + 1],		/* L1 word read */
+  l2word[MAXSTRL + 1],    /* L2 word read */
   sword[MAXSTRL + 1];		/* semantic word read */
 
   /* find the keyword and get rid of the blanks */
@@ -926,15 +979,19 @@ read_input_pairs (fp)
 	  exit (EXIT_SIZE_ERROR);
 	}
 
-      if (sscanf (rest, "%s %s", lword, sword) != 2)
+      if (sscanf (rest, "%s %s %s", l1word, l2word, sword) != 3)
 	{
 	  fprintf (stderr, "Wrong number of words in an input pair\n");
 	  exit (EXIT_DATA_ERROR);
 	}
-      if (strcasecmp (lword, INP_NONE))
-	pairs[i].lindex = wordindex (lword, lwords, nlwords);
+      if (strcasecmp (l1word, INP_NONE))
+	pairs[i].l1index = wordindex (l1word, l1words, nl1words);
       else
-	pairs[i].lindex = NONE;
+	pairs[i].l1index = NONE;      
+      if (strcasecmp (l2word, INP_NONE))
+  pairs[i].l2index = wordindex (l2word, l2words, nl2words);
+      else
+  pairs[i].l2index = NONE;
       if (strcasecmp (sword, INP_NONE))
 	pairs[i].sindex = wordindex (sword, swords, nswords);
       else
@@ -1164,7 +1221,7 @@ WORDSTRUCT **words;			/* lexicon pointer*/
 int *nrep,				/* representation size */
   *nwords;				/* number of words */
 {
-  if (modi != LINPMOD && modi != LOUTMOD)
+  if (modi == SINPMOD && modi == SOUTMOD)
     /* it is semantic */
     {
       *words = swords;
@@ -1172,13 +1229,21 @@ int *nrep,				/* representation size */
       *nwords = nswords;
       return (SEMWINMOD);
     }
-  else
-    /* it is lexical */
+  else if (modi == L1INPMOD && modi == L1OUTMOD)
+    /* it is L1 */
     {
-      *words = lwords;
-      *nrep = nlrep;
-      *nwords = nlwords;
-      return (LEXWINMOD);
+      *words = l1words;
+      *nrep = nl1rep;
+      *nwords = nl1words;
+      return (L1WINMOD);
+    }
+  else
+    /* it is L2 */
+    {
+      *words = l2words;
+      *nrep = nl2rep;
+      *nwords = nl2words;
+      return (L2WINMOD);
     }
 }
 
@@ -1407,23 +1472,26 @@ get_current_params (epoch)
     ;
 
   /* which networks are currently running */
-  lex_running = lex_runnings[phase];
+  l1_running = l1_runnings[phase];
+  l2_running = l2_runnings[phase];
   sem_running = sem_runnings[phase];
   assoc_running = assoc_runnings[phase];
 
   /* get the current learning rates */
-  lex_alpha = current_alpha (epoch, phase, phaseends, lex_alphas);
+  l1_alpha = current_alpha (epoch, phase, phaseends, l1_alphas);
+  l2_alpha = current_alpha (epoch, phase, phaseends, l2_alphas);
   sem_alpha = current_alpha (epoch, phase, phaseends, sem_alphas);
   assoc_alpha = current_alpha (epoch, phase, phaseends, assoc_alphas);
 
   /* if number of propagation units is specified,
      calculate the smallest nc that contains them */
   if (npropunits_given)
-    lex_nc = sem_nc = ((int) ceil (sqrt (npropunits))) / 2;
+    l1_nc = l2_nc = sem_nc = ((int) ceil (sqrt (npropunits))) / 2;
   else
     /* use the nc given in the schedule */
     {
-      lex_nc = current_nc (epoch, phase, phaseends, lex_ncs);
+      l1_nc = current_nc (epoch, phase, phaseends, lex_ncs);
+      l2_nc = current_nc (epoch, phase, phaseends, lex_ncs);
       sem_nc = current_nc (epoch, phase, phaseends, sem_ncs);
     }
 }

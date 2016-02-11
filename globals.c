@@ -23,8 +23,8 @@
 WORDSTRUCT l1words[MAXWORDS],	/* L1 lexical words */
   l2words[MAXWORDS],  /* L2 lexical words */
   swords[MAXWORDS];		/* semantic words */
-int nlwords, nswords,		/* number of lexical and semantic words - L1 and L2 should have same # of words */
-  nlrep, nsrep;			/* dimension of lexical and semantic reps */
+int nl1words, nl2words, nswords,		/* number of lexical and semantic words */
+  nl1rep, nl2rep, nsrep;			/* dimension of lexical and semantic reps */
 int instances[MAXWORDS];	/* indices of the instance words */
 int ninstances;			/* number of instances */
 
@@ -36,7 +36,7 @@ int shuffletable[MAXPAIRS];	/* order of wordpair presentations */
 
 /***************** lexicon maps *****************/
 
-int nlnet, nsnet;		/* size (side) of lex and sem maps; L1 L2 maps should have same sizes */
+int nl1net, nl2net, nsnet;		/* size (side) of lex and sem maps*/
 
 FMUNIT l1units[MAXLSNET][MAXLSNET], /* L1 feature map */
   l2units[MAXLSNET][MAXLSNET], /* L2 feature map */
@@ -116,8 +116,8 @@ RESOURCE_DATA data;		/* resource data structure */
 /* these definitions are in effect in all other files except main.c */
 
 extern WORDSTRUCT l1words[MAXWORDS], l2words[MAXWORDS], swords[MAXWORDS];
-extern int nlwords, nswords,
-  nlrep, nsrep;
+extern int nl1words, nl2words, nswords,
+  nl1rep, nl2rep, nsrep;
 extern int instances[MAXWORDS];
 extern int ninstances;
 extern PAIRSTRUCT pairs[MAXPAIRS];
