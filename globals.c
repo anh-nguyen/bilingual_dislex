@@ -91,7 +91,8 @@ int npropunits;			/* number of propagation units */
 
 /* file names */
 char 
-  lrepfile[MAXFILENAMEL + 1],	/* lexical representations */
+  l1repfile[MAXFILENAMEL + 1],	/* L1 representations */
+  l2repfile[MAXFILENAMEL + 1],  /* L2 representations */
   srepfile[MAXFILENAMEL + 1],	/* semantic representations */
   simufile[MAXFILENAMEL + 1],	/* lexicon simulation file */
   current_inpfile[MAXFILENAMEL + 1];	/* wordpair input file */
@@ -114,7 +115,7 @@ RESOURCE_DATA data;		/* resource data structure */
 #else
 /* these definitions are in effect in all other files except main.c */
 
-extern WORDSTRUCT lwords[MAXWORDS], swords[MAXWORDS];
+extern WORDSTRUCT l1words[MAXWORDS], l2words[MAXWORDS], swords[MAXWORDS];
 extern int nlwords, nswords,
   nlrep, nsrep;
 extern int instances[MAXWORDS];
@@ -132,12 +133,14 @@ extern double
 extern int ninprep[NMODULES],
   noutrep[NMODULES];
 extern char
-  lrepfile[MAXFILENAMEL + 1],
+  l1repfile[MAXFILENAMEL + 1],
+  l2repfile[MAXFILENAMEL + 1],
   srepfile[MAXFILENAMEL + 1],
   simufile[MAXFILENAMEL + 1],
   current_inpfile[MAXFILENAMEL + 1];
 extern double
-  lex_alpha,
+  l1_alpha,
+  l2_alpha,
   sem_alpha,
   assoc_alpha;
 extern int
@@ -167,7 +170,11 @@ extern int nlnet, nsnet;
 extern FMUNIT lunits[MAXLSNET][MAXLSNET],
   sunits[MAXLSNET][MAXLSNET];
 extern double
-  lsassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET],
-  slassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET];
+  l1sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], 
+  sl1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; 
+  l2sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], 
+  sl2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; 
+  l1l2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET],
+  l2l1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET];
 
 #endif /*  #ifdef DEFINE_GLOBALS */
