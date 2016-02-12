@@ -125,7 +125,8 @@ typedef struct RESOURCE_DATA
     int delay;			/* seconds to sleep in major simulation steps*/
     float reversevalue;		/* threshold for reversing color */
     Dimension netwidth,		/* width of network widgets */
-      lexnetheight,		/* height of the lexical map window */
+      l1netheight,		/* height of the L1 map window */
+      l2netheight,    /* height of the L2 map window */
       semnetheight;		/* height of the semantic map window */
     Boolean owncmap;		/* use private colormap */
     Pixel textColor,		/* color of the text on display */
@@ -133,7 +134,8 @@ typedef struct RESOURCE_DATA
     String commandfont,		/* command line */
       titlefont,		/* network title */
       logfont,			/* I/O item and error */
-      lexfont,
+      l1font,
+      l2font,
       semfont;			/* lexical and semantic map labels */
     Boolean help,		/* user help command line option */
       testing;			/* testing/training mode command line option */

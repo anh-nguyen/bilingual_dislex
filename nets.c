@@ -737,11 +737,17 @@ iterate_weights (dofun, fp, par1, par2)
 {
   int i, j, k, ii, jj;
 
-  /* lexical map input weights */
-  for (i = 0; i < nlnet; i++)
-    for (j = 0; j < nlnet; j++)
-      for (k = 0; k < nlrep; k++)
-	(*dofun) (fp, &lunits[i][j].comp[k], par1, par2);
+  /* L1 map input weights */
+  for (i = 0; i < nl1net; i++)
+    for (j = 0; j < nl1net; j++)
+      for (k = 0; k < nl1rep; k++)
+	(*dofun) (fp, &l1units[i][j].comp[k], par1, par2);
+
+  /* L2 map input weights */
+  for (i = 0; i < nl2net; i++)
+    for (j = 0; j < nl2net; j++)
+      for (k = 0; k < nl2rep; k++)
+  (*dofun) (fp, &l2units[i][j].comp[k], par1, par2);
 
   /* semantic map input weights */
   for (i = 0; i < nsnet; i++)
@@ -750,14 +756,32 @@ iterate_weights (dofun, fp, par1, par2)
 	(*dofun) (fp, &sunits[i][j].comp[k], par1, par2);
 
   /* associative connections */
-  for (i = 0; i < nlnet; i++)
-    for (j = 0; j < nlnet; j++)
+  for (i = 0; i < nl1net; i++)
+    for (j = 0; j < nl1net; j++)
       for (ii = 0; ii < nsnet; ii++)
 	for (jj = 0; jj < nsnet; jj++)
 	  {
-	    (*dofun) (fp, &lsassoc[i][j][ii][jj], par1, par2);
-	    (*dofun) (fp, &slassoc[ii][jj][i][j], par1, par2);
+	    (*dofun) (fp, &l1sassoc[i][j][ii][jj], par1, par2);
+	    (*dofun) (fp, &sl1assoc[ii][jj][i][j], par1, par2);
 	  }
+
+  for (i = 0; i < nl2net; i++)
+    for (j = 0; j < nl2net; j++)
+      for (ii = 0; ii < nsnet; ii++)
+  for (jj = 0; jj < nsnet; jj++)
+    {
+      (*dofun) (fp, &l2sassoc[i][j][ii][jj], par1, par2);
+      (*dofun) (fp, &sl2assoc[ii][jj][i][j], par1, par2);
+    }
+
+  for (i = 0; i < nl2net; i++)
+    for (j = 0; j < nl2net; j++)
+      for (ii = 0; ii < nl1net; ii++)
+  for (jj = 0; jj < nl1net; jj++)
+    {
+      (*dofun) (fp, &l2l1assoc[i][j][ii][jj], par1, par2);
+      (*dofun) (fp, &l1l2assoc[ii][jj][i][j], par1, par2);
+    }
 }
 
 
@@ -766,19 +790,41 @@ normalize_all_assocweights ()
 /* run through all output weights and normalize */
 /* convenient to do both directions at once */
 {
-  double lsvalue, slvalue;
+  double l1svalue, sl1value, l2svalue, sl2value, l1l2value, l2l1value;
   int i, j, ii, jj;
 	
-  lsvalue = 1.0 / sqrt ((double) (nsnet * nsnet));
-  slvalue = 1.0 / sqrt ((double) (nlnet * nlnet));
-  for(i = 0; i < nlnet; i++)
-    for(j = 0; j < nlnet; j++)
+  l1svalue = 1.0 / sqrt ((double) (nsnet * nsnet));
+  sl1value = 1.0 / sqrt ((double) (nl1net * nl1net));
+  for(i = 0; i < nl1net; i++)
+    for(j = 0; j < nl1net; j++)
       for(ii = 0; ii < nsnet; ii++)
 	for(jj = 0; jj < nsnet; jj++)
 	  {
-	    lsassoc[i][j][ii][jj] = lsvalue;
-	    slassoc[ii][jj][i][j] = slvalue;
+	    l1sassoc[i][j][ii][jj] = l1svalue;
+	    sl1assoc[ii][jj][i][j] = sl1value;
 	  }
+
+  l2svalue = 1.0 / sqrt ((double) (nsnet * nsnet));
+  sl2value = 1.0 / sqrt ((double) (nl2net * nl2net));
+  for(i = 0; i < nl2net; i++)
+    for(j = 0; j < nl2net; j++)
+      for(ii = 0; ii < nsnet; ii++)
+  for(jj = 0; jj < nsnet; jj++)
+    {
+      l2sassoc[i][j][ii][jj] = l2svalue;
+      sl2assoc[ii][jj][i][j] = sl2value;
+    }
+
+  l2l1value = 1.0 / sqrt ((double) (nl1net * nl1net));
+  l1l2value = 1.0 / sqrt ((double) (nl2net * nl2net));
+  for(i = 0; i < nl2net; i++)
+    for(j = 0; j < nl2net; j++)
+      for(ii = 0; ii < nl1net; ii++)
+  for(jj = 0; jj < nl1net; jj++)
+    {
+      l2l1assoc[i][j][ii][jj] = l2l1value;
+      l1l2assoc[ii][jj][i][j] = l1l2value;
+    }
 }
 
 

@@ -136,18 +136,22 @@ static Window
 /* text constants to be displayed */
 static char
  *titles[] =
-{"LEXICAL MAP", "unused",	/* input and output lexical maps are combined*/
+{"L1 LEXICAL MAP", "unused",	/* input and output L1 lexical maps are combined*/
+ "L2 LEXICAL MAP", "unused",  /* input and output L2 lexical maps are combined*/
  "SEMANTIC MAP", "unused"};	/* into one window; their entries are unused */
 
 /* graphics contexts */
 static GC
   titleGC,			/* window name */
   logGC,			/* log line: item and error */
-  lexfGC,
+  l1fGC,
+  l2fGC,
   semfGC,			/* foreground labels on maps */
-  lexbGC,
+  l1bGC,
+  l2bGC,
   sembGC,			/* background (reverse) labels */
-  lexnGC,
+  l1nGC,
+  l2nGC,
   semnGC,			/* nearestlabels */
   clearGC,			/* for clearing areas */
   boxGC,			/* for drawing network boxes */
@@ -155,7 +159,7 @@ static GC
 
 /* corresponding fonts */
 static XFontStruct
- *titlefontStruct, *logfontStruct, *lexfontStruct, *semfontStruct;
+ *titlefontStruct, *logfontStruct, *l1fontStruct, *l2fontStruct, *semfontStruct;
 
 static int titleboxhght;	/* size of text boxes */
 
@@ -225,8 +229,10 @@ display_init ()
   /* create the lex network displays */
   /* get the size from resourses */
   XtSetArg (args[0], XtNwidth, data.netwidth);
-  XtSetArg (args[1], XtNheight, data.lexnetheight);
-  lex = XtCreateManagedWidget ("lex", gwinWidgetClass, form, args, 2);
+  XtSetArg (args[1], XtNheight, data.l1netheight);
+  l1 = XtCreateManagedWidget ("l1", gwinWidgetClass, form, args, 2);
+  XtSetArg (args[1], XtNheight, data.l2netheight);
+  l2 = XtCreateManagedWidget ("l2", gwinWidgetClass, form, args, 2);
   XtSetArg (args[1], XtNheight, data.semnetheight);
   sem = XtCreateManagedWidget ("sem", gwinWidgetClass, form, args, 2);
 
@@ -237,16 +243,20 @@ display_init ()
   XtAddCallback (quit, XtNcallback, quit_callback, NULL);
 
   /* network callbacks: redrawing the state */
-  XtAddCallback (lex, XtNexposeCallback, expose_lex, lunits);
+  XtAddCallback (l1, XtNexposeCallback, expose_lex, l1units);
+  XtAddCallback (l2, XtNexposeCallback, expose_lex, l2units);
   XtAddCallback (sem, XtNexposeCallback, expose_lex, sunits);
 
   /* network callbacks for resizing */
-  XtAddCallback (lex, XtNresizeCallback, resize_lex, NULL);
+  XtAddCallback (l1, XtNresizeCallback, resize_lex, NULL);
+  XtAddCallback (l2, XtNresizeCallback, resize_lex, NULL);
   XtAddCallback (sem, XtNresizeCallback, resize_lex, NULL);
 
   /* network event handlers for mouse clicks */
-  XtAddEventHandler (lex, ButtonPressMask, FALSE,
+  XtAddEventHandler (l1, ButtonPressMask, FALSE,
 		     (XtEventHandler) lexsemmouse_handler, NULL);
+  XtAddEventHandler (l2, ButtonPressMask, FALSE,
+         (XtEventHandler) lexsemmouse_handler, NULL);
   XtAddEventHandler (sem, ButtonPressMask, FALSE,
 		     (XtEventHandler) lexsemmouse_handler, NULL);
 
@@ -259,7 +269,8 @@ display_init ()
   commandWin = XtWindow (command);
 
   /* get the lexicon windows */
-  Win[LEXWINMOD] = XtWindow (lex);	/* get a pointer to the window */
+  Win[L1WINMOD] = XtWindow (l1);	/* get a pointer to the window */
+  Win[L2WINMOD] = XtWindow (l2);  /* get a pointer to the window */
   Win[SEMWINMOD] = XtWindow (sem);	/* get a pointer to the window */
 
   /* set a common font for all buttons and command line */
@@ -273,7 +284,8 @@ display_init ()
   /* load the other fonts */
   titlefontStruct = loadFont (data.titlefont);
   logfontStruct = loadFont (data.logfont);
-  lexfontStruct = loadFont (data.lexfont);
+  l1fontStruct = loadFont (data.l1font);
+  l2fontStruct = loadFont (data.l2font);
   semfontStruct = loadFont (data.semfont);
 
   /* figure out space needed for the title and labels */
@@ -289,15 +301,18 @@ display_init ()
   createGC (theMain, &logGC, logfontStruct->fid, data.textColor, theBGpix);
 
   /* these are foreground colors */
-  createGC (theMain, &lexfGC, lexfontStruct->fid, data.textColor, theBGpix);
+  createGC (theMain, &l1fGC, l1fontStruct->fid, data.textColor, theBGpix);
+  createGC (theMain, &l2fGC, l2fontStruct->fid, data.textColor, theBGpix);
   createGC (theMain, &semfGC, semfontStruct->fid, data.textColor, theBGpix);
 
   /* and these are background (when the label color needs to be reversed) */
-  createGC (theMain, &lexbGC, lexfontStruct->fid, theBGpix, theBGpix);
+  createGC (theMain, &l1bGC, l1fontStruct->fid, theBGpix, theBGpix);
+  createGC (theMain, &l2bGC, l2fontStruct->fid, theBGpix, theBGpix);
   createGC (theMain, &sembGC, semfontStruct->fid, theBGpix, theBGpix);
 
   /* and these are the nearestlabel colors (same as net) */
-  createGC (theMain, &lexnGC, lexfontStruct->fid, data.netColor, theBGpix);
+  createGC (theMain, &l1nGC, l1fontStruct->fid, data.netColor, theBGpix);
+  createGC (theMain, &l2nGC, l2fontStruct->fid, data.netColor, theBGpix);
   createGC (theMain, &semnGC, semfontStruct->fid, data.netColor, theBGpix);
 
   /* clearing areas */
@@ -308,7 +323,8 @@ display_init ()
   createGC (theMain, &activityGC, logfontStruct->fid, theBGpix, theBGpix);
 
   /* calculate all network geometries and put them on screen */
-  resize_lex (lex, NULL, NULL);
+  resize_lex (l1, NULL, NULL);
+  resize_lex (l2, NULL, NULL);
   resize_lex (sem, NULL, NULL);
 
   printf ("Graphics initialization complete.\n");
@@ -432,12 +448,19 @@ static void
 clear_networks_display ()
   /* clear the network activations, labels, logs, and the display */
 {
-  /* clear the lexical map and its display */
-  clear_values (lunits, nlnet);
-  clear_prevvalues (lunits, nlnet);
-  clear_labels (lunits, nlnet);
-  sprintf (net[LEXWINMOD].log, "%s", "");
-  XClearArea (theDisplay, Win[LEXWINMOD], 0, 0, 0, 0, True);
+  /* clear the L1 map and its display */
+  clear_values (l1units, nl1net);
+  clear_prevvalues (l1units, nl1net);
+  clear_labels (l1units, nl1net);
+  sprintf (net[L1WINMOD].log, "%s", "");
+  XClearArea (theDisplay, Win[L1WINMOD], 0, 0, 0, 0, True);
+
+  /* clear the L2 map and its display */
+  clear_values (l2units, nl2net);
+  clear_prevvalues (l2units, nl2net);
+  clear_labels (l2units, nl2net);
+  sprintf (net[L2WINMOD].log, "%s", "");
+  XClearArea (theDisplay, Win[L2WINMOD], 0, 0, 0, 0, True);
 
   /* clear the semantic map and its display */
   clear_values (sunits, nsnet);
@@ -469,7 +492,8 @@ close_display ()
 {
   XFreeFont (theDisplay, titlefontStruct);
   XFreeFont (theDisplay, logfontStruct);
-  XFreeFont (theDisplay, lexfontStruct);
+  XFreeFont (theDisplay, l1fontStruct);
+  XFreeFont (theDisplay, l2fontStruct);
   XFreeFont (theDisplay, semfontStruct);
   XCloseDisplay (theDisplay);
 }
@@ -772,12 +796,23 @@ resize_lex (w, client_data, call_data)
   /* standard callback parameters; widget is actually used here */
      Widget w; XtPointer client_data, call_data;
 {
-  /* figure out the module number and size from the widget given */
-  int
-    modi = ((w == lex) ? LEXWINMOD : SEMWINMOD),
-    nnet = ((w == lex) ? nlnet : nsnet);
-  XFontStruct *fontstruct =
-    ((w == lex) ? lexfontStruct : semfontStruct);	/* label font */
+  int modi, nnet;
+  XFontStruct *fontstruct; /* label font */
+
+
+  /* figure out the module number, size and font from the widget given */
+  if (w == l1):
+    modi = L1WINMOD;
+    nnet = nl1net;
+    *fontstruct = l1fontStruct;
+  if (w == l2):
+    modi = L2WINMOD;
+    nnet = nl2net;
+    *fontstruct = l2fontStruct;
+  else:
+    modi = SEMWINMOD;
+    nnet = nsnet;
+    *fontstruct = semfontStruct;
 
   common_resize (modi, w);	/* get new window size */
   /* height of the boxes representing unit activities */
@@ -802,10 +837,14 @@ lexsemmouse_handler (w, client_data, p_event)
   int x = p_event->xbutton.x,		/* mouse coordinates */
       y = p_event->xbutton.y;
   
-  if (w == lex)
+  if (w == l1)
     display_assocweights (LEXWINMOD, lunits, nlnet, lwords, nlrep, nlwords,
 			  SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
 			  x, y, lsassoc);
+  if (w == l2)
+    display_assocweights (LEXWINMOD, lunits, nlnet, lwords, nlrep, nlwords,
+        SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
+        x, y, lsassoc);
   else
     display_assocweights (SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
 			  LEXWINMOD, lunits, nlnet, lwords, nlrep, nlwords,
