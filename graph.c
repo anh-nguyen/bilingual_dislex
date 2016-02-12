@@ -838,17 +838,26 @@ lexsemmouse_handler (w, client_data, p_event)
       y = p_event->xbutton.y;
   
   if (w == l1)
-    display_assocweights (LEXWINMOD, lunits, nlnet, lwords, nlrep, nlwords,
+    display_assocweights (L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
 			  SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
-			  x, y, lsassoc);
+			  x, y, l1sassoc);
+    display_assocweights (L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
+        L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
+        x, y, l1l2assoc);
   if (w == l2)
-    display_assocweights (LEXWINMOD, lunits, nlnet, lwords, nlrep, nlwords,
+    display_assocweights (L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
         SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
-        x, y, lsassoc);
+        x, y, l2sassoc);
+    display_assocweights (L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
+        L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
+        x, y, l2l1assoc);
   else
     display_assocweights (SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
-			  LEXWINMOD, lunits, nlnet, lwords, nlrep, nlwords,
-			  x, y, slassoc);
+			  L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
+			  x, y, sl1assoc);
+    display_assocweights (SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
+        L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
+        x, y, sl2assoc);
 }
 
 
@@ -934,16 +943,25 @@ display_lex (modi, units, nnet)
   if (modi == SINPMOD || modi == SOUTMOD)
     modi = SEMWINMOD;
   /* both lexical input and output go to the same window */
-  if (modi == LINPMOD || modi == LOUTMOD)
-    modi = LEXWINMOD;
+  if (modi == L1INPMOD || modi == L1OUTMOD)
+    modi = L1WINMOD;
+  if (modi == L2INPMOD || modi == L2OUTMOD)
+    modi = L2WINMOD;
 
   /* lexical and semantic fonts and colors could be different */
-  if (modi == LEXWINMOD)
+  if (modi == L1WINMOD)
     {
-      fontstruct = lexfontStruct;
-      currfGC = lexfGC;
-      currbGC = lexbGC;
-      currnGC = lexnGC;
+      fontstruct = l1fontStruct;
+      currfGC = l1fGC;
+      currbGC = l1bGC;
+      currnGC = l1nGC;
+    }
+  else if (modi == L2WINMOD)
+    {
+      fontstruct = l2fontStruct;
+      currfGC = l2fGC;
+      currbGC = l2bGC;
+      currnGC = l2nGC;
     }
   else
     {
@@ -992,7 +1010,7 @@ display_error (modi)
   winmodi = select_lexicon (modi, &words, &nrep, &nwords);
 
   /* first figure out whether this is input map or output (associative) map */
-  if (modi == LINPMOD || modi == SINPMOD)
+  if (modi == L1INPMOD || modi == L2INPMOD ||modi == SINPMOD)
     sprintf (net[winmodi].log, "Input");
   else
     sprintf (net[winmodi].log, "Assoc");
