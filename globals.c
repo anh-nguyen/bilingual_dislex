@@ -144,9 +144,11 @@ extern double
   sem_alpha,
   assoc_alpha;
 extern int
-  lex_nc,
+  l1_nc,
+  l2_nc,
   sem_nc,
-  lex_running,
+  l1_running,
+  l2_running,
   sem_running,
   assoc_running;
 extern int
@@ -166,8 +168,9 @@ extern Colormap colormap;
 extern Widget main_widget, form;
 extern NETSTRUCT net[NMODULES];
 extern RESOURCE_DATA data;
-extern int nlnet, nsnet;
-extern FMUNIT lunits[MAXLSNET][MAXLSNET],
+extern int nl1net, nl2net, nsnet;
+extern FMUNIT l1units[MAXLSNET][MAXLSNET],
+  l2units[MAXLSNET][MAXLSNET],
   sunits[MAXLSNET][MAXLSNET];
 extern double
   l1sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], 

@@ -106,8 +106,10 @@ iterate_pairs ()
   /* first display the current labels and clean previous activations */
   if (displaying)
     {
-      if (lex_running || assoc_running)
-	init_lex_display (LEXWINMOD, nlnet, nlwords, lwords, nlrep, lunits);
+      if (l1_running || assoc_running)
+	init_lex_display (L1WINMOD, nl1net, nl1words, l1words, nl1rep, l1units);
+      if (l2_running || assoc_running)
+  init_lex_display (L2WINMOD, nl2net, nl2words, l2words, nl2rep, l2units);
       if (sem_running || assoc_running)
 	init_lex_display (SEMWINMOD, nsnet, nswords, swords, nsrep, sunits);
       /* stop if stepping, check for events */

@@ -52,14 +52,18 @@
 #define SIMU_L1_ALPHAS "l1-alphas"
 #define SIMU_L2_ALPHAS "l2-alphas"
 #define SIMU_SEM_ALPHAS "sem-alphas"
-#define SIMU_ASSOC_ALPHAS "assoc-alphas"
+#define SIMU_L1L2_ASSOC_ALPHAS "l1l2-assoc-alphas"
+#define SIMU_SL1_ASSOC_ALPHAS "sl1-assoc-alphas"
+#define SIMU_SL2_ASSOC_ALPHAS "sl2-assoc-alphas"
 #define SIMU_L1_NCS "l1-ncs"
 #define SIMU_L2_NCS "l2-ncs"
 #define SIMU_SEM_NCS "sem-ncs"
 #define SIMU_L1_RUNNING "l1-running"
 #define SIMU_L2_RUNNING "l2-running"
 #define SIMU_SEM_RUNNING "sem-running"
-#define SIMU_ASSOC_RUNNING "assoc-running"
+#define SIMU_L1L2_ASSOC_RUNNING "l1l2-assoc-running"
+#define SIMU_SL1_ASSOC_RUNNING "sl1-assoc-running"
+#define SIMU_SL2_ASSOC_RUNNING "sl2-assoc-running"
 #define SIMU_EPOCH "epoch"
 #define SIMU_NETWORK_ERRORS "network-errors"
 #define SIMU_NETWORK_WEIGHTS "network-weights"
@@ -156,7 +160,9 @@ static double
   l1_a[MAXPHASE + 1], *l1_alphas, 	/* L1 alphas for each phase */
   l2_a[MAXPHASE + 1], *l2_alphas,   /* L2 alphas for each phase */
   s_a[MAXPHASE + 1], *sem_alphas,	/* semmap alphas for each phase */
-  a_a[MAXPHASE + 1], *assoc_alphas;	/* assoc alphas for each phase */
+  l1l2_a_a[MAXPHASE + 1], *l1l2_assoc_alphas;	/* assoc alphas for each phase */
+  sl1_a_a[MAXPHASE + 1], *sl1_assoc_alphas; /* assoc alphas for each phase */
+  sl2_a_a[MAXPHASE + 1], *sl2_assoc_alphas; /* assoc alphas for each phase */
 static int
   l1_n[MAXPHASE + 1], *l1_ncs,	/* L1 neighborhood sizes per phase */
   l2_n[MAXPHASE + 1], *l2_ncs,  /* L2 neighborhood sizes per phase */
@@ -164,7 +170,9 @@ static int
   l1_runnings[MAXPHASE],	/* whether L1 is running this phase */
   l2_runnings[MAXPHASE],  /* whether L2 is running this phase */
   sem_runnings[MAXPHASE],	/* whether sem is running this phase */
-  assoc_runnings[MAXPHASE];	/* whether assoc is running this phase */
+  l1l2_assoc_runnings[MAXPHASE];	/* whether L1 L2 assoc is running this phase */
+  sl1_assoc_runnings[MAXPHASE]; /* whether Sem L1 assoc is running this phase */
+  sl2_assoc_runnings[MAXPHASE]; /* whether Sem L2 assoc is running this phase */
 
 /* define the geometry of the display */
 static String fallback_resources[] =
@@ -705,7 +713,9 @@ init_system ()
   l1_alphas = l1_a + 1;
   l2_alphas = l2_a + 1;
   sem_alphas = s_a + 1;
-  assoc_alphas = a_a + 1;
+  l1l2_assoc_alphas = a_a + 1;
+  sl1_assoc_alphas = a_a + 1;
+  sl2_assoc_alphas = a_a + 1;
   l1_ncs = l1_n + 1;
   l2_ncs = l2_n + 1;
   sem_ncs = s_n + 1;
@@ -877,12 +887,30 @@ read_params (fp)
       exit (EXIT_DATA_ERROR);
     }
 
-  read_till_keyword (fp, SIMU_ASSOC_ALPHAS, REQUIRED);
+  read_till_keyword (fp, SIMU_L1L2_ASSOC_ALPHAS, REQUIRED);
   fgetline (fp, rest, MAXSTRL);
-  if (text2floats (&assoc_alphas[-1], MAXPHASE + 1, rest) != nphase + 1)
+  if (text2floats (&l1l2_assoc_alphas[-1], MAXPHASE + 1, rest) != nphase + 1)
     {
       fprintf (stderr, "Number of %s does not match the number of phases\n",
-	       SIMU_ASSOC_ALPHAS);
+	       SIMU_L1L2_ASSOC_ALPHAS);
+      exit (EXIT_DATA_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_SL1_ASSOC_ALPHAS, REQUIRED);
+  fgetline (fp, rest, MAXSTRL);
+  if (text2floats (&sl1_assoc_alphas[-1], MAXPHASE + 1, rest) != nphase + 1)
+    {
+      fprintf (stderr, "Number of %s does not match the number of phases\n",
+         SIMU_SL1_ASSOC_ALPHAS);
+      exit (EXIT_DATA_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_SL2_ASSOC_ALPHAS, REQUIRED);
+  fgetline (fp, rest, MAXSTRL);
+  if (text2floats (&sl2_assoc_alphas[-1], MAXPHASE + 1, rest) != nphase + 1)
+    {
+      fprintf (stderr, "Number of %s does not match the number of phases\n",
+         SIMU_SL2_ASSOC_ALPHAS);
       exit (EXIT_DATA_ERROR);
     }
 
@@ -940,12 +968,30 @@ read_params (fp)
       exit (EXIT_DATA_ERROR);
     }
 
-  read_till_keyword (fp, SIMU_ASSOC_RUNNING, REQUIRED);
+  read_till_keyword (fp, SIMU_L1L2_ASSOC_RUNNING, REQUIRED);
   fgetline (fp, rest, MAXSTRL);
-  if (text2ints (assoc_runnings, MAXPHASE, rest) != nphase)
+  if (text2ints (l1l2_assoc_runnings, MAXPHASE, rest) != nphase)
     {
       fprintf (stderr, "Number of %s does not match the number of phases\n",
-	       SIMU_ASSOC_RUNNING);
+	       SIMU_L1L2_ASSOC_RUNNING);
+      exit (EXIT_DATA_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_SL1_ASSOC_RUNNING, REQUIRED);
+  fgetline (fp, rest, MAXSTRL);
+  if (text2ints (sl1_assoc_runnings, MAXPHASE, rest) != nphase)
+    {
+      fprintf (stderr, "Number of %s does not match the number of phases\n",
+         SIMU_SL1_ASSOC_RUNNING);
+      exit (EXIT_DATA_ERROR);
+    }
+
+  read_till_keyword (fp, SIMU_SL2_ASSOC_RUNNING, REQUIRED);
+  fgetline (fp, rest, MAXSTRL);
+  if (text2ints (sl2_assoc_runnings, MAXPHASE, rest) != nphase)
+    {
+      fprintf (stderr, "Number of %s does not match the number of phases\n",
+         SIMU_SL2_ASSOC_RUNNING);
       exit (EXIT_DATA_ERROR);
     }
 }
@@ -1475,13 +1521,17 @@ get_current_params (epoch)
   l1_running = l1_runnings[phase];
   l2_running = l2_runnings[phase];
   sem_running = sem_runnings[phase];
-  assoc_running = assoc_runnings[phase];
+  l1l2_assoc_running = l1l2_assoc_runnings[phase];
+  sl1_assoc_running = sl1_assoc_runnings[phase];
+  sl2_assoc_running = sl2_assoc_runnings[phase];
 
   /* get the current learning rates */
   l1_alpha = current_alpha (epoch, phase, phaseends, l1_alphas);
   l2_alpha = current_alpha (epoch, phase, phaseends, l2_alphas);
   sem_alpha = current_alpha (epoch, phase, phaseends, sem_alphas);
-  assoc_alpha = current_alpha (epoch, phase, phaseends, assoc_alphas);
+  l1l2_assoc_alpha = current_alpha (epoch, phase, phaseends, l1l2_assoc_alphas);
+  sl1_assoc_alpha = current_alpha (epoch, phase, phaseends, sl1_assoc_alphas);
+  sl2_assoc_alpha = current_alpha (epoch, phase, phaseends, sl2_assoc_alphas);
 
   /* if number of propagation units is specified,
      calculate the smallest nc that contains them */
