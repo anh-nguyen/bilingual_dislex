@@ -68,7 +68,9 @@ double
   l1_alpha,			/* L1 map learning rate */
   l2_alpha,     /* L2 map learning rate */
   sem_alpha,			/* semantic map learning rate */
-  assoc_alpha;			/* associative connections learning rate */
+  l1l2_assoc_alpha;			/* associative connections learning rate */
+  sl1_assoc_alpha;      /* associative connections learning rate */
+  sl2_assoc_alpha;      /* associative connections learning rate */
 int
   l1_nc,			/* L1 neighborhood size */
   l2_nc,      /* L2 neighborhood size */
@@ -76,7 +78,9 @@ int
   l1_running,			/* whether L1 is running this phase */
   l2_running,     /* whether L2 is running this phase */
   sem_running,			/* whether sem is running this phase */
-  assoc_running;		/* whether assoc is running this phase */
+  l1l2_assoc_running;		/* whether L1 to L2 assoc is running this phase */
+  sl1_assoc_running;    /* whether Sem to L1 assoc is running this phase */
+  sl2_assoc_running;    /* whether Sem to L2 assoc is running this phase */
 
 /* simulation flags */
 int simulator_running,		/* flag: process events or run */
@@ -141,8 +145,10 @@ extern char
 extern double
   l1_alpha,
   l2_alpha,
-  sem_alpha,
-  assoc_alpha;
+  sem_alpha,  
+  l1l2_assoc_alpha, 
+  sl1_assoc_alpha,
+  sl2_assoc_alpha;  
 extern int
   l1_nc,
   l2_nc,
@@ -150,7 +156,9 @@ extern int
   l1_running,
   l2_running,
   sem_running,
-  assoc_running;
+  l1l2_assoc_running,
+  sl1_assoc_running,
+  sl2_assoc_running;
 extern int
   displaying,
   simulator_running,
