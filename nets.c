@@ -84,7 +84,8 @@ static void modify_assoc_weights __P ((FMUNIT iunits[MAXLSNET][MAXLSNET],
 				       LEXPROPUNIT aprop[], int naprop,
 				       int nanet,
 				       double assoc[MAXLSNET][MAXLSNET]
-				       [MAXLSNET][MAXLSNET]));
+				       [MAXLSNET][MAXLSNET], 
+               double alpha));
 static int clip __P((int index, int limit, int (*comparison) (int, int)));
 static int ige __P((int i, int j));
 static int ile __P((int i, int j));
@@ -230,9 +231,9 @@ iterate_pairs ()
 	  pairs[shuffletable[pairi]].sindex != NONE)
 	{
 	  modify_assoc_weights (l1units, sunits, l1prop, nl1prop, sprop, nsprop,
-				nsnet, l1sassoc);
+				nsnet, l1sassoc, sl1_assoc_alpha);
 	  modify_assoc_weights (sunits, l1units, sprop, nsprop, l1prop, nl1prop,
-				nl1net, sl1assoc);
+				nl1net, sl1assoc, sl1_assoc_alpha);
 	  if (displaying)
 	    {	
 	      display_lex (L1INPMOD, l1units, nl1net);
@@ -248,9 +249,9 @@ iterate_pairs ()
     pairs[shuffletable[pairi]].sindex != NONE)
   {
     modify_assoc_weights (l2units, sunits, l2prop, nl2prop, sprop, nsprop,
-        nsnet, l2sassoc);
+        nsnet, l2sassoc, sl2_assoc_alpha);
     modify_assoc_weights (sunits, l2units, sprop, nsprop, l2prop, nl2prop,
-        nl2net, sl2assoc);
+        nl2net, sl2assoc, sl2_assoc_alpha);
     if (displaying)
       { 
         display_lex (L2INPMOD, l2units, nl2net);
@@ -267,9 +268,9 @@ iterate_pairs ()
     pairs[shuffletable[pairi]].sindex != NONE)
   {
     modify_assoc_weights (l2units, l1units, l2prop, nl2prop, l1prop, nl1prop,
-        nl1net, l2l1assoc);
+        nl1net, l2l1assoc, l1l2_assoc_alpha);
     modify_assoc_weights (l1units, l2units, l1prop, nl1prop, l2prop, nl2prop,
-        nl2net, l1l2assoc);
+        nl2net, l1l2assoc, l1l2_assoc_alpha);
     if (displaying)
       { 
         display_lex (L2INPMOD, l2units, nl2net);
@@ -609,7 +610,7 @@ modify_input_weights (modi, units, alpha, prop, nprop)
 
 static void
 modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
-		      assoc)
+		      assoc, alpha)
 /* adapt the associative connections */
    FMUNIT iunits[MAXLSNET][MAXLSNET],	/* input units */
      aunits[MAXLSNET][MAXLSNET];	/* assoc units */
@@ -625,7 +626,7 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
   for (i = 0; i < niprop; i++)
     for (a = 0; a < naprop; a++)
       assoc[iprop[i].i][iprop[i].j][aprop[a].i][aprop[a].j] += 
-	assoc_alpha * iunits[iprop[i].i][iprop[i].j].value *
+	alpha * iunits[iprop[i].i][iprop[i].j].value *
       	              aunits[aprop[a].i][aprop[a].j].value;
   
   /* normalize the associative output connections of a unit */
