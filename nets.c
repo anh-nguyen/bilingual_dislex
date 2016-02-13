@@ -102,7 +102,7 @@ iterate_pairs ()
     l2prop[MAXLSNET * MAXLSNET],
     sprop[MAXLSNET * MAXLSNET];
   int pairi,				/* word pair counter */
-    nlprop, nsprop;			/* lex and sem number of prop units */
+    nl1prop, nl2prop, nsprop;			/* lex and sem number of prop units */
 
   /* first display the current labels and clean previous activations */
   if (displaying)
@@ -121,11 +121,11 @@ iterate_pairs ()
   for (pairi = 0; pairi < npairs; pairi++)
     {
       /* first propagate from L1 to L2 and semantic */
-      if (pairs[shuffletable[pairi]].lindex != NONE)
+      if (pairs[shuffletable[pairi]].l1index != NONE)
 	{
 	  if (l1_running || l1l2_assoc_running || sl1_assoc_running)
 	    present_input (L1INPMOD, l1units, nl1net, l1words,
-			   pairs[shuffletable[pairi]].lindex,
+			   pairs[shuffletable[pairi]].l1index,
 			   l1prop, &nl1prop, l1_nc);
 	  if (!testing & l1_running)
 	    modify_input_weights (L1INPMOD, l1units, l1_alpha, l1prop, nl1prop);
@@ -135,7 +135,7 @@ iterate_pairs ()
 		       l1prop, nl1prop, l1sassoc);
     if (testing && l1l2_assoc_running)
       associate (l1units, L2OUTMOD, l2units, nl2net, l2words,
-           pairs[shuffletable[pairi]].sindex,
+           pairs[shuffletable[pairi]].l2index,
            l1prop, nl1prop, l1l2assoc);
 	  if (testing && displaying && (l1_running || l1l2_assoc_running || sl1_assoc_running))
 	    {	
@@ -156,11 +156,11 @@ iterate_pairs ()
 	}
 
         /* then propagate from L2 to L1 and semantic */
-      if (pairs[shuffletable[pairi]].lindex != NONE)
+      if (pairs[shuffletable[pairi]].l2index != NONE)
   {
     if (l2_running || l1l2_assoc_running || sl2_assoc_running)
       present_input (L2INPMOD, l2units, nl2net, l2words,
-         pairs[shuffletable[pairi]].lindex,
+         pairs[shuffletable[pairi]].l2index,
          l2prop, &nl2prop, l2_nc);
     if (!testing & l2_running)
       modify_input_weights (L2INPMOD, l2units, l2_alpha, l2prop, nl2prop);
@@ -170,7 +170,7 @@ iterate_pairs ()
            l2prop, nl2prop, l2sassoc);
     if (testing && l1l2_assoc_running)
       associate (l2units, L1OUTMOD, l1units, nl1net, l1words,
-           pairs[shuffletable[pairi]].sindex,
+           pairs[shuffletable[pairi]].l1index,
            l2prop, nl2prop, l2l1assoc);
     if (testing && displaying && (l2_running || l1l2_assoc_running || sl2_assoc_running))
       { 
@@ -201,11 +201,11 @@ iterate_pairs ()
 	    modify_input_weights (SINPMOD, sunits, sem_alpha, sprop, nsprop);
 	  if (testing && sl1_assoc_running)
 	    associate (sunits, L1OUTMOD, l1units, nl1net, l1words,
-		       pairs[shuffletable[pairi]].lindex,
+		       pairs[shuffletable[pairi]].l1index,
 		       sprop, nsprop, sl1assoc);
     if (testing && sl2_assoc_running)
       associate (sunits, L2OUTMOD, l2units, nl2net, l2words,
-           pairs[shuffletable[pairi]].lindex,
+           pairs[shuffletable[pairi]].l2index,
            sprop, nsprop, sl2assoc);
 	  if (testing && displaying && (sem_running || sl1_assoc_running || sl2_assoc_running))
 	    {
@@ -227,7 +227,7 @@ iterate_pairs ()
 	  
       /* finally, update the 3 associations */
       if (!testing && sl1_assoc_running &&
-	  pairs[shuffletable[pairi]].lindex != NONE &&
+	  pairs[shuffletable[pairi]].l1index != NONE &&
 	  pairs[shuffletable[pairi]].sindex != NONE)
 	{
 	  modify_assoc_weights (l1units, sunits, l1prop, nl1prop, sprop, nsprop,
@@ -245,7 +245,7 @@ iterate_pairs ()
 	}
 
       if (!testing && sl2_assoc_running &&
-    pairs[shuffletable[pairi]].lindex != NONE &&
+    pairs[shuffletable[pairi]].l2index != NONE &&
     pairs[shuffletable[pairi]].sindex != NONE)
   {
     modify_assoc_weights (l2units, sunits, l2prop, nl2prop, sprop, nsprop,
@@ -261,11 +261,11 @@ iterate_pairs ()
         wait_and_handle_events ();
       }
   }
-    }
+  
 
       if (!testing && l1l2_assoc_running &&
-    pairs[shuffletable[pairi]].lindex != NONE &&
-    pairs[shuffletable[pairi]].sindex != NONE)
+    pairs[shuffletable[pairi]].l1index != NONE &&
+    pairs[shuffletable[pairi]].l2index != NONE)
   {
     modify_assoc_weights (l2units, l1units, l2prop, nl2prop, l1prop, nl1prop,
         nl1net, l2l1assoc, l1l2_assoc_alpha);
@@ -618,6 +618,7 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
      nanet;				/* output net size */
    LEXPROPUNIT iprop[], aprop[];	/* active input and assoc units */
    double assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET];
+   double alpha;
 {
   int i, a, ii, jj;
   float sum;

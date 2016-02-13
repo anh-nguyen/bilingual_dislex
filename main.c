@@ -246,8 +246,10 @@ static XtResource resources[] =
 
   {"netwidth", "Netwidth", XtRDimension, sizeof (Dimension),
    XtOffset (RESOURCE_DATA_PTR, netwidth), XtRString, "768"},
-  {"lexnetheight", "Lexnetheight", XtRDimension, sizeof (Dimension),
-   XtOffset (RESOURCE_DATA_PTR, lexnetheight), XtRString, "348"},
+  {"l1netheight", "L1netheight", XtRDimension, sizeof (Dimension),
+   XtOffset (RESOURCE_DATA_PTR, l1netheight), XtRString, "348"},
+  {"l2netheight", "L2netheight", XtRDimension, sizeof (Dimension),
+   XtOffset (RESOURCE_DATA_PTR, l2netheight), XtRString, "348"},
   {"semnetheight", "Semnetheight", XtRDimension, sizeof (Dimension),
    XtOffset (RESOURCE_DATA_PTR, semnetheight), XtRString, "348"},
 
@@ -264,8 +266,10 @@ static XtResource resources[] =
    XtOffset (RESOURCE_DATA_PTR, titlefont), XtRString, "8x13bold"},
   {"logfont", "Logfont", XtRString, sizeof (String),
    XtOffset (RESOURCE_DATA_PTR, logfont), XtRString, "6x10"},
-  {"lexfont", "Lexfont", XtRString, sizeof (String),
-   XtOffset (RESOURCE_DATA_PTR, lexfont), XtRString, "5x8"},
+  {"l1font", "L1font", XtRString, sizeof (String),
+   XtOffset (RESOURCE_DATA_PTR, l1font), XtRString, "5x8"},
+  {"l2font", "L2font", XtRString, sizeof (String),
+   XtOffset (RESOURCE_DATA_PTR, l2font), XtRString, "5x8"},
   {"semfont", "Semfont", XtRString, sizeof (String),
    XtOffset (RESOURCE_DATA_PTR, semfont), XtRString, "5x8"},
 
@@ -713,9 +717,9 @@ init_system ()
   l1_alphas = l1_a + 1;
   l2_alphas = l2_a + 1;
   sem_alphas = s_a + 1;
-  l1l2_assoc_alphas = a_a + 1;
-  sl1_assoc_alphas = a_a + 1;
-  sl2_assoc_alphas = a_a + 1;
+  l1l2_assoc_alphas = l1l2_a_a + 1;
+  sl1_assoc_alphas = sl1_a_a + 1;
+  sl2_assoc_alphas = sl2_a_a + 1;
   l1_ncs = l1_n + 1;
   l2_ncs = l2_n + 1;
   sem_ncs = s_n + 1;
@@ -796,7 +800,7 @@ read_params (fp)
 
   read_till_keyword (fp, SIMU_L1MAPSIZE, REQUIRED);
   fscanf (fp, "%d", &nl1net);
-  if (nl1net > MAXLSNET || nlnet <= 0)
+  if (nl1net > MAXLSNET || nl1net <= 0)
     {
       fprintf (stderr, "%s exceeds array size\n", SIMU_L1MAPSIZE);
       exit (EXIT_SIZE_ERROR);
@@ -804,7 +808,7 @@ read_params (fp)
 
   read_till_keyword (fp, SIMU_L2MAPSIZE, REQUIRED);
   fscanf (fp, "%d", &nl2net);
-  if (nl2net > MAXLSNET || nlnet <= 0)
+  if (nl2net > MAXLSNET || nl2net <= 0)
     {
       fprintf (stderr, "%s exceeds array size\n", SIMU_L2MAPSIZE);
       exit (EXIT_SIZE_ERROR);
@@ -1540,8 +1544,8 @@ get_current_params (epoch)
   else
     /* use the nc given in the schedule */
     {
-      l1_nc = current_nc (epoch, phase, phaseends, lex_ncs);
-      l2_nc = current_nc (epoch, phase, phaseends, lex_ncs);
+      l1_nc = current_nc (epoch, phase, phaseends, l1_ncs);
+      l2_nc = current_nc (epoch, phase, phaseends, l2_ncs);
       sem_nc = current_nc (epoch, phase, phaseends, sem_ncs);
     }
 }

@@ -67,7 +67,7 @@ init_stats ()
 	  within[modi] = 0;
 	  /* there is a different number of lexical vs. semantic words */
 	  for (i = 0;
-	       i < ((modi == LINPMOD || modi == LOUTMOD) ? nlwords : nswords);
+	       i < ((modi == SINPMOD || modi == SOUTMOD) ? nswords : ((modi == L1INPMOD || modi == L1OUTMOD) ? nl1words : nl2words));
 	       i++)
 	    corr[modi][i] = all[modi][i] = 0;
 	}
@@ -152,8 +152,8 @@ print_stats (epoch)
   for (modi = 0; modi < NMODULES; modi++)
     {
       /* first set the dimensions properly (lexical or semantic) */
-      nwords = (modi == LINPMOD || modi == LOUTMOD) ? nlwords : nswords;
-      nrep = (modi == LINPMOD || modi == LOUTMOD) ? nlrep : nsrep;
+      nwords = (modi == SINPMOD || modi == SOUTMOD) ? nswords : ((modi == L1INPMOD || modi == L1OUTMOD) ? nl1words : nl2words);
+      nrep = (modi == SINPMOD || modi == SOUTMOD) ? nsrep : ((modi == L1INPMOD || modi == L1OUTMOD) ? nl1rep : nl2rep);
       sum_corr = sum_all = sum_corrinst = sum_allinst = 0;
       /* sum up all word counts and all correct word counts */
       for (i = 0; i < nwords; i++)
