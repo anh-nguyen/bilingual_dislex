@@ -322,6 +322,7 @@ display_init ()
   /* generic context for displaying unit activity */
   createGC (theMain, &activityGC, logfontStruct->fid, theBGpix, theBGpix);
 
+
   /* calculate all network geometries and put them on screen */
   resize_lex (l1, NULL, NULL);
   resize_lex (l2, NULL, NULL);
@@ -629,14 +630,15 @@ clean_color_map(k)
     printf ("Obtained %d colors.\n", k);
 
   /* clean up cmap; move all entries to the beginning */
+  printf ("MAXCOLORS =  %d colors.\n", MAXCOLORS);
   m = 0;
   while (m < MAXCOLORS && cmap[m] != NONE)
     ++m;
-  for (i = m + 1; i < MAXCOLORS; i++)
+  for (i = m + 1; i < MAXCOLORS; i++) {
     if (cmap[i] == NONE)	/* no colorcell */
       continue;
     else
-      cmap[m] = cmap[i], ++m;
+      cmap[m] = cmap[i], ++m; }
 }
 
 
@@ -781,6 +783,9 @@ expose_lex (w, units, call_data)
     modi = ((w == sem) ? SEMWINMOD : ((w == l1) ? L1WINMOD : L2WINMOD)),
     nnet = ((w == sem) ? nsnet : ((w == l1) ? nl1net : nl2net));
 
+  
+  printf("expose lex modi = %s\n", modi);
+  
   XClearWindow (theDisplay, Win[modi]);
   display_title (modi, titles[modi]);
   clear_prevvalues (units, nnet);
@@ -796,11 +801,17 @@ resize_lex (w, client_data, call_data)
   /* standard callback parameters; widget is actually used here */
      Widget w; XtPointer client_data, call_data;
 {
-  int modi, nnet;
-  XFontStruct *fontstruct; /* label font */
 
+  printf("w = %s\n", w);
 
   /* figure out the module number, size and font from the widget given */
+  int
+    modi = ((w == sem) ? SEMWINMOD : ((w == l1) ? L1WINMOD : L2WINMOD)),
+    nnet = ((w == sem) ? nsnet : ((w == l1) ? nl1net : nl2net));  
+
+  XFontStruct *fontstruct = ((w == sem) ? semfontStruct : ((w == l1) ? l1fontStruct : l2fontStruct));
+  
+/*
   if (w == l1) {
     modi = L1WINMOD;
     nnet = nl1net;
@@ -815,14 +826,25 @@ resize_lex (w, client_data, call_data)
     modi = SEMWINMOD;
     nnet = nsnet;
     XFontStruct *fontstruct = semfontStruct;
-  }
+  }*/
 
+  printf("modi = %s\n", modi);
   common_resize (modi, w);	/* get new window size */
   /* height of the boxes representing unit activities */
+
+  printf("got to here...\n");
+
+  printf("modi = %s\n", modi);
   net[modi].uhght = (net[modi].height - titleboxhght - VERSP) / nnet;
   net[modi].uwidth = (net[modi].width - 2 * HORSP) / nnet;
+  
+  printf("%s\n", net[modi].uhght);
+
+  printf("got to here...\n");
 
   net[modi].maxlabels = net[modi].uhght / fontstruct->ascent;
+  
+  printf("but not here...?\n");
 
   /* horizontal margin from the edge of the window */
   net[modi].marg = (net[modi].width - nnet * net[modi].uwidth) / 2;
