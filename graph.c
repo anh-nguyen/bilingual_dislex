@@ -127,7 +127,7 @@ static int actual_color_range;	/* number of colors in use */
 static Widget
   runstop, step, clear, quit,	/* buttons */
   command,			/* command input widget */
-  lex, sem;			/* network graphics widgets */
+  l1, l2, sem;			/* network graphics widgets */
 
 /* useful pointers to windows */
 static Window
@@ -778,8 +778,8 @@ expose_lex (w, units, call_data)
 {
   /* figure out the module number and size from the widget given */
   int
-    modi = ((w == lex) ? LEXWINMOD : SEMWINMOD),
-    nnet = ((w == lex) ? nlnet : nsnet);
+    modi = ((w == sem) ? SEMWINMOD : ((w == l1) ? L1WINMOD : L2WINMOD)),
+    nnet = ((w == sem) ? nsnet : ((w == l1) ? nl1net : nl2net));
 
   XClearWindow (theDisplay, Win[modi]);
   display_title (modi, titles[modi]);
@@ -801,18 +801,21 @@ resize_lex (w, client_data, call_data)
 
 
   /* figure out the module number, size and font from the widget given */
-  if (w == l1):
+  if (w == l1) {
     modi = L1WINMOD;
     nnet = nl1net;
-    *fontstruct = l1fontStruct;
-  if (w == l2):
+    XFontStruct *fontstruct = l1fontStruct;
+  }
+  else if (w == l2) {
     modi = L2WINMOD;
     nnet = nl2net;
-    *fontstruct = l2fontStruct;
-  else:
+    XFontStruct *fontstruct = l2fontStruct;
+  }
+  else {
     modi = SEMWINMOD;
     nnet = nsnet;
-    *fontstruct = semfontStruct;
+    XFontStruct *fontstruct = semfontStruct;
+  }
 
   common_resize (modi, w);	/* get new window size */
   /* height of the boxes representing unit activities */
@@ -837,27 +840,27 @@ lexsemmouse_handler (w, client_data, p_event)
   int x = p_event->xbutton.x,		/* mouse coordinates */
       y = p_event->xbutton.y;
   
-  if (w == l1)
+  if (w == l1) {
     display_assocweights (L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
 			  SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
 			  x, y, l1sassoc);
     display_assocweights (L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
         L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
-        x, y, l1l2assoc);
-  if (w == l2)
+        x, y, l1l2assoc); }
+  else if (w == l2) {
     display_assocweights (L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
         SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
         x, y, l2sassoc);
     display_assocweights (L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
         L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
-        x, y, l2l1assoc);
-  else
+        x, y, l2l1assoc); }
+  else {
     display_assocweights (SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
 			  L1WINMOD, l1units, nl1net, l1words, nl1rep, nl1words,
 			  x, y, sl1assoc);
     display_assocweights (SEMWINMOD, sunits, nsnet, swords, nsrep, nswords,
         L2WINMOD, l2units, nl2net, l2words, nl2rep, nl2words,
-        x, y, sl2assoc);
+        x, y, sl2assoc); }
 }
 
 
@@ -885,8 +888,8 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
   
   /* only accept points within the network display */
   if (x >= net[srcmodi].marg && y >= titleboxhght &&
-      x <= net[srcmodi].marg + nlnet * net[srcmodi].uwidth && 
-      y <= titleboxhght + nlnet * net[srcmodi].uhght)
+      x <= net[srcmodi].marg + nl1net * net[srcmodi].uwidth && 
+      y <= titleboxhght + nl1net * net[srcmodi].uhght)
     {
       /* calculate which unit is requested */
       uniti = (x - net[srcmodi].marg) / net[srcmodi].uwidth;

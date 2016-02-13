@@ -11,8 +11,8 @@
 inputfile bilingual-input-pairs
 
 # names of the lexical and semantic representation files
-l1repfile bilingual-l1reps
-l2repfile bilingual-l2reps
+l1repfile bilingual-l1-reps
+l2repfile bilingual-l2-reps
 srepfile bilingual-sreps
 
 # sizes (sides) of the lexical and semantic maps

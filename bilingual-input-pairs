@@ -18,35 +18,35 @@
 # Format: Eng (L1) 		Spanish (L2)		Semantic
 
 symbol-concept-pairs
-eIt__ 	ate
-br@Uk 	broke
-hIt__ 	hit
-muvd_ 	moved
-b$l__ 	gear
-b{t__ 	livebat
-b{t__ 	gear
-b$I__ 	human
-peIp@ 	block
-Jiz__ 	food
-JIkIn 	food
-JIkIn 	prey
-k3t@n 	furnitu
-dEsk_ 	furnitu
-dQl__ 	doll
-f$k__ 	utensil
-g3l__ 	human
-h{JIt 	gear
-h{m@R 	gear
-m{n__ 	human
-wUm{n 	human
-pleIt 	glass
-rQk__ 	block
-p#st@ 	food
-spun_ 	utensil
-k{r@t 	food
-v#z__ 	vase
-wInd@ 	glass
-dQg__ 	dog
-wUlf_ 	predatr
-Sip__ 	prey
-lQI@n 	predatr
+eIt__ 	eIt__ 	ate
+br@Uk 	br@Uk 	broke
+hIt__ 	hIt__ 	hit
+muvd_ 	muvd_ 	moved
+b$l__ 	b$l__ 	gear
+b{t__ 	b{t__ 	livebat
+b{t__ 	b{t__ 	gear
+b$I__ 	b$I__ 	human
+peIp@ 	peIp@ 	block
+Jiz__ 	Jiz__ 	food
+JIkIn 	JIkIn 	food
+JIkIn 	JIkIn 	prey
+k3t@n 	k3t@n 	furnitu
+dEsk_ 	dEsk_ 	furnitu
+dQl__ 	dQl__ 	doll
+f$k__ 	f$k__ 	utensil
+g3l__ 	g3l__ 	human
+h{JIt 	h{JIt 	gear
+h{m@R 	h{m@R 	gear
+m{n__ 	m{n__ 	human
+wUm{n 	wUm{n 	human
+pleIt 	pleIt 	glass
+rQk__ 	rQk__ 	block
+p#st@ 	p#st@ 	food
+spun_ 	spun_ 	utensil
+k{r@t 	k{r@t 	food
+v#z__ 	v#z__ 	vase
+wInd@ 	wInd@ 	glass
+dQg__ 	dQg__ 	dog
+wUlf_ 	wUlf_ 	predatr
+Sip__ 	Sip__ 	prey
+lQI@n 	lQI@n 	predatr
