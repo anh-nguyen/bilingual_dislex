@@ -444,7 +444,9 @@ test_snapshot (epoch)
 {
   get_current_params (epoch);	/* current learning rates and neighborhoods */
   init_stats ();
+  printf("here 2 ?\n");
   iterate_pairs ();		/* run through the test set */
+  printf("here 3 ?\n");
   print_stats (epoch);		/* performance statistics */
 }
 
@@ -797,6 +799,8 @@ read_params (fp)
 
   read_till_keyword (fp, SIMU_SREPFILE, REQUIRED);
   fscanf (fp, "%s", srepfile);
+
+  printf("hi from read_till_keyword\n");
 
   read_till_keyword (fp, SIMU_L1MAPSIZE, REQUIRED);
   fscanf (fp, "%d", &nl1net);
@@ -1430,6 +1434,7 @@ readfun (fp, place, par1, par2)
 {
   if (fscanf (fp, "%lf", place) != 1)
     {
+      printf ("fscanf (fp, \"lf\", place)  = %d\n", fscanf (fp, "%lf", place));
       fprintf (stderr, "Error reading weights\n");
       exit (EXIT_DATA_ERROR);
     }

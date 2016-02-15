@@ -323,10 +323,15 @@ display_init ()
   createGC (theMain, &activityGC, logfontStruct->fid, theBGpix, theBGpix);
 
 
+  printf(" before three resize_lexes\n");
+
   /* calculate all network geometries and put them on screen */
   resize_lex (l1, NULL, NULL);
   resize_lex (l2, NULL, NULL);
   resize_lex (sem, NULL, NULL);
+
+
+  printf(" after three resize_lexes\n");
 
   printf ("Graphics initialization complete.\n");
 }
@@ -630,7 +635,6 @@ clean_color_map(k)
     printf ("Obtained %d colors.\n", k);
 
   /* clean up cmap; move all entries to the beginning */
-  printf ("MAXCOLORS =  %d colors.\n", MAXCOLORS);
   m = 0;
   while (m < MAXCOLORS && cmap[m] != NONE)
     ++m;
@@ -702,10 +706,12 @@ common_resize (modi, w)
   /* get the current width and height from the server */
   XtSetArg (args[0], XtNwidth, &width);
   XtSetArg (args[1], XtNheight, &height);
+
   XtGetValues (w, args, 2);
   /* and store them for further calculations */
   net[modi].width = width;
   net[modi].height = height;
+
 }
 
 
@@ -802,8 +808,6 @@ resize_lex (w, client_data, call_data)
      Widget w; XtPointer client_data, call_data;
 {
 
-  printf("w = %s\n", w);
-
   /* figure out the module number, size and font from the widget given */
   int
     modi = ((w == sem) ? SEMWINMOD : ((w == l1) ? L1WINMOD : L2WINMOD)),
@@ -811,6 +815,7 @@ resize_lex (w, client_data, call_data)
 
   XFontStruct *fontstruct = ((w == sem) ? semfontStruct : ((w == l1) ? l1fontStruct : l2fontStruct));
   
+
 /*
   if (w == l1) {
     modi = L1WINMOD;
@@ -828,17 +833,16 @@ resize_lex (w, client_data, call_data)
     XFontStruct *fontstruct = semfontStruct;
   }*/
 
-  printf("modi = %s\n", modi);
+  printf("got to here...\n");
   common_resize (modi, w);	/* get new window size */
   /* height of the boxes representing unit activities */
 
-  printf("got to here...\n");
+  printf("what about here?\n");
 
-  printf("modi = %s\n", modi);
   net[modi].uhght = (net[modi].height - titleboxhght - VERSP) / nnet;
   net[modi].uwidth = (net[modi].width - 2 * HORSP) / nnet;
   
-  printf("%s\n", net[modi].uhght);
+  printf("%d\n", net[modi].uhght);
 
   printf("got to here...\n");
 
