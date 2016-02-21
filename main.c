@@ -367,8 +367,10 @@ run_simulation_once ()
       iterate_weights (randfun, NULL, WEIGHTLOW, WEIGHTSPAN);
       normalize_all_assocweights ();
 
+      printf ("after randfun and normalization\n");
       /* read all snapshots, getting current weights and epoch */
       read_and_process_snapshots (&epoch);
+      printf ("after read_and_process_snapshots\n");
 
       /* update shuffling (so that we can continue where we left off) */
       if (shuffling)
@@ -1432,10 +1434,10 @@ readfun (fp, place, par1, par2)
      double *place,		/* return the float read */
        par1, par2;		/* unused */
 {
-  if (fscanf (fp, "%lf", place) != 1)
+  if (fscanf (fp, "%lf", place) > 1)
     {
       printf ("fscanf (fp, \"lf\", place)  = %d\n", fscanf (fp, "%lf", place));
-      printf ("place  = %d\n", place);
+      printf ("place  = %lf\n", place);
       fprintf (stderr, "Error reading weights\n");
       exit (EXIT_DATA_ERROR);
     }
