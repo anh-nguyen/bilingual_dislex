@@ -774,7 +774,6 @@ iterate_weights (dofun, fp, par1, par2)
       for (ii = 0; ii < nsnet; ii++)
 	for (jj = 0; jj < nsnet; jj++)
 	  {
-      printf("l1sassoc[i][j][ii][jj] = %d\n", l1sassoc[i][j][ii][jj]);
 	    (*dofun) (fp, &l1sassoc[i][j][ii][jj], par1, par2);
 	    (*dofun) (fp, &sl1assoc[ii][jj][i][j], par1, par2);
 	  }

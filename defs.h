@@ -17,7 +17,7 @@
 
 /* These constants define the maximum sizes of tables that hold data
    and the network weights and representations */
-#define MAXREP 125		/* max size of lexical & semantic reps */
+#define MAXREP 210		/* max size of lexical & semantic reps */
 #define MAXLSNET 40		/* max size of lexicon feature maps (side) */
 #define MAXFMLABELS 10		/* max # of displayed labels per map unit
                                    (includes the nearestlabel for each) */
@@ -27,7 +27,7 @@
 #define MAXSNAPS 50		/* max number of snapshots */
 #define MAXWORDL 30		/* max length of input words (chars) */
 #define MAXFILENAMEL 100	/* max length of file names (chars) */
-#define MAXSTRL 1000		/* max length of input lines (chars) */
+#define MAXSTRL 2000		/* max length of input lines (chars) */
 
 /* system constants (not maxsize but actual size) */
 #define NMODULES 6		/* lex and sem output and input */

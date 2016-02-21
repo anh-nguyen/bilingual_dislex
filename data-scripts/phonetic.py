@@ -99,6 +99,7 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 	syl = open(padded_sampa_file, "r")
 	rep = open(result_file, "w")
 	test_max_length = 0
+	longest_word =""
 
 	for word in sampa:
 		word = word.strip() 			# remove \n and space
@@ -131,18 +132,20 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 		# right-pad to match length of longest word
 		if len(numeric_rep) > test_max_length and find_max_length:			# code for finding out max length
 			test_max_length = len(numeric_rep)
+			longest_word = word
 
 		# right_padding
 		for _ in range(len(numeric_rep), max_length):
 			numeric_rep.append(consonant_reps["_"])
 
+
 		rep.write("{0} {1} \n".format(word, " ".join(numeric_rep)))
 
 	if find_max_length:
 		if stress_index == ENG_STRESS_INDEX:
-			print("English longest string = {0}; nreps = {1}".format(test_max_length, test_max_length*4))
+			print("English longest string = {0} {1}; nreps = {2}".format(test_max_length, longest_word, test_max_length*4))
 		else:
-			print("Spanish longest string = {0}; nreps = {1}".format(test_max_length, test_max_length*4))
+			print("Spanish longest string = {0} {1}; nreps = {2}".format(test_max_length, longest_word, test_max_length*4))
 
 	sampa.close()
 	syl.close()
