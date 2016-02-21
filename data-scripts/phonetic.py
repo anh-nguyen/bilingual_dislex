@@ -3,6 +3,11 @@ import sys
 # 	tap/flap = manner, 0.100
 # 	trill = manner, 0.200
 
+
+# separate consonant and vowel dict
+# separate features for each (still 4 per letter though - add features as mentioned in paper)
+# add rule that averages 2 consonants when there are more than 3 consonants
+
 phonetic_features_dict = {'_' : '0.000 0.000 0.000 0.000 0.000',
 						  'G' : '0.875 0.333 0.350 0.000 0.000', 
 						  'm' : '0.125 0.833 0.250 0.000 0.000',
@@ -61,13 +66,8 @@ phonetic_features_dict = {'_' : '0.000 0.000 0.000 0.000 0.000',
 
 
 # stress indexes figured out manually by looking at the word where index of the primary stress character is highest
-english_stress_index = 4       
-spanish_stress_index = 10
-
-# max length figured out by the find_max_length and test_max_length variables in num-reps
-eng_max_length = 14
-spanish_max_length = 25
-
+english_stress_index = 6       
+spanish_stress_index = 20
 
 def num_reps (sampa_file, result_file, stress_index, max_length):
 	find_max_length = True
@@ -101,23 +101,7 @@ def num_reps (sampa_file, result_file, stress_index, max_length):
 			else: 
 				numeric_rep.append(phonetic_features_dict[symbol])
 
-
-			# right-pad to match length of longest word
-
-		if len(numeric_rep) > test_max_length and find_max_length:			# code for finding out max length
-			test_max_length = len(numeric_rep)
-
-		# right_padding
-		for _ in range(len(numeric_rep), max_length):
-			numeric_rep.append(phonetic_features_dict["_"])
-
 		rep.write("{0} {1} \n".format(word, " ".join(numeric_rep)))
-
-	if find_max_length:
-		if stress_index == english_stress_index:
-			print("English longest string = {0}".format(test_max_length))
-		else:
-			print("Spanish longest string = {0}".format(test_max_length))
 
 	sampa.close()
 	rep.close()
