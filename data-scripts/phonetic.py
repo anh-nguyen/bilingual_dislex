@@ -99,9 +99,10 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 	syl = open(padded_sampa_file, "r")
 	rep = open(result_file, "w")
 	test_max_length = 0
-	longest_word =""
+	longest_word = ""
 
 	for word in sampa:
+		consonants_between_vowels = 0
 		word = word.strip() 			# remove \n and space
 		word = word.replace(" ", "_")
 		padded_word = syl.readline().strip()
@@ -124,8 +125,12 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 			# fill word in with actual symbols
 			if symbol in consonant_reps:
 				numeric_rep.append(consonant_reps[symbol])
+				consonants_between_vowels = consonants_between_vowels + 1
+				if consonants_between_vowels == 5:
+					print "3-consonant word = {0} \n".format(padded_word)
 			elif symbol in vowel_reps:
 				numeric_rep.append(vowel_reps[symbol])
+				consonants_between_vowels = 0
 			else:
 				sys.exit("Symbol {0} from {1} not in dict".format(symbol, padded_word))
 

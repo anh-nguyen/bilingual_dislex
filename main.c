@@ -1435,6 +1435,7 @@ readfun (fp, place, par1, par2)
   if (fscanf (fp, "%lf", place) != 1)
     {
       printf ("fscanf (fp, \"lf\", place)  = %d\n", fscanf (fp, "%lf", place));
+      printf ("place  = %d\n", place);
       fprintf (stderr, "Error reading weights\n");
       exit (EXIT_DATA_ERROR);
     }
