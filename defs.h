@@ -17,8 +17,8 @@
 
 /* These constants define the maximum sizes of tables that hold data
    and the network weights and representations */
-#define MAXREP 25		/* max size of lexical & semantic reps */
-#define MAXLSNET 20		/* max size of lexicon feature maps (side) */
+#define MAXREP 150		/* max size of lexical & semantic reps */
+#define MAXLSNET 40		/* max size of lexicon feature maps (side) */
 #define MAXFMLABELS 10		/* max # of displayed labels per map unit
                                    (includes the nearestlabel for each) */
 #define MAXWORDS 300		/* max number of lexical & semantic words */

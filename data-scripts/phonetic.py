@@ -77,12 +77,12 @@ def num_reps (sampa_file, result_file, stress_index, max_length):
 
 	for word in sampa:
 		word = word.strip() 			# remove \n and space
+		word = word.replace(" ", "_")
 		try:
 			word_stress_index = word.index('"')
 		except ValueError: 
 			word_stress_index = 0
-		new_word = word.replace(" ", "_")			# fill space with blank
-		new_word = new_word.replace("j\\", "J")			# make the symbol j\ one-character long
+		new_word = word.replace("j\\", "J")			# make the symbol j\ one-character long
 		new_word = new_word.replace("tS", "C")			# make the symbol tS one-character long
 		new_word = new_word.replace("\"", "")			# remove primary stress symbols
 		new_word = new_word.replace("%", "")			# remove secondary stress symbols
