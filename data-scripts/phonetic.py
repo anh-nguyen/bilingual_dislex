@@ -11,16 +11,14 @@ import sys
 #		unrounded = 0.500
 #		rounded = 1.000
 #	VOWEL LENGTH: 
+#		no info / context-dependent = 0.000
 #		short = 0.500
 #		long = 1.000
-# 
 
 
 # TODO: 
-# separate consonant and vowel dict - DONE
-# separate features for each (still 4 per letter though - add features as mentioned in paper)
 # add rule that averages 2 consonants when there are more than 3 consonants
-# make sure normal SAMPA reps are also read - DONE
+
 
 # The order of feature vectors for CONSONANTS are:
 #		'PLACE 		MANNER		VOICEDNESS/SOUND	LATERALIZATION'
@@ -53,29 +51,29 @@ consonant_reps = {'_' : '0.000 0.000 0.000 0.000',
 				  'h' : '1.000 0.333 0.750 0.000',
 				  '4' : '0.500 0.100 0.250 0.000',
 				  'r' : '0.500 0.200 0.250 0.000',
-				  'l' : '0.500 0.667 0.250 5.000',
+				  'l' : '0.500 0.667 0.250 0.500',
 				  'L' : '0.750 0.667 0.250 0.000',
 				  'w' : '0.125 0.500 0.250 0.000'
 				  }
 
 
 # The order of feature vectors for VOWELS are:
-#	'CHROMACITY/TONGUE POSITION 	SONORITY/HEIGHT 	LENGTH 		ROUNDNESS	'
+#	'SONORITY/HEIGHT	CHROMACITY/TONGUE POSITION 	 	LENGTH 		ROUNDNESS'
 
-vowel_reps = {'i' : '0.200 0.143',
-			  'y' : '0.200 0.143', 
-			  'u' : '1.000 0.143', 
-			  'I' : '0.400 0.286', 
-			  'U' : '0.800 0.286', 
-			  'e' : '0.200 0.286', 
-			  'o' : '1.000 0.286', 
-			  '@' : '0.600 0.571', 
-			  'E' : '0.200 0.714', 
-			  'V' : '1.000 0.714', 
-			  'O' : '1.000 0.714', 
-			  '{' : '0.200 0.857', 
-			  'a' : '0.200 1.000', 
-			  'A' : '1.000 1.000', 
+vowel_reps = {'i' : '0.143 0.200 0.000 0.500',
+			  'y' : '0.143 0.200 0.000 1.000', 
+			  'u' : '0.143 1.000 0.000 1.000', 
+			  'I' : '0.286 0.400 0.500 0.500', 
+			  'U' : '0.286 0.800 0.000 1.000', 
+			  'e' : '0.286 0.200 0.000 0.500', 
+			  'o' : '0.286 1.000 0.000 1.000', 
+			  '@' : '0.571 0.600 0.000 0.500', 
+			  'E' : '0.714 0.200 0.500 0.500', 
+			  'V' : '0.714 1.000 0.500 0.500', 
+			  'O' : '0.714 1.000 0.000 1.000', 
+			  '{' : '0.857 0.200 0.500 0.500', 
+			  'a' : '1.000 0.200 0.000 0.500', 
+			  'A' : '1.000 1.000 0.000 0.500', 
 			  }
 
 # decide where the padding for English & Spanish will be
@@ -87,12 +85,12 @@ vowel_reps = {'i' : '0.200 0.143',
 
 
 # stress indexes figured out manually by looking at the word where index of the primary stress character is highest
-english_stress_index = 6       
-spanish_stress_index = 18
+ENG_STRESS_INDEX = 6       
+SPANISH_STRESS_INDEX = 16
 
 # max length figured out by the find_max_length and test_max_length variables in num-reps
-eng_max_length = 14
-spanish_max_length = 25
+ENG_MAX_LENGTH = 30
+SPANISH_MAX_LENGTH = 52
 
 
 def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_length):
@@ -110,7 +108,7 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 			word_stress_index = padded_word.index('"')
 		except ValueError: 
 			word_stress_index = 0
-		padded_word = word.replace("j\\", "J")			# make the symbol j\ one-character long
+		padded_word = padded_word.replace("j\\", "J")			# make the symbol j\ one-character long
 		padded_word = padded_word.replace("tS", "C")			# make the symbol tS one-character long
 		padded_word = padded_word.replace("\"", "")			# remove primary stress symbols
 		padded_word = padded_word.replace("%", "")			# remove secondary stress symbols
@@ -122,11 +120,10 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 			numeric_rep.append(consonant_reps['_'])
 
 		for symbol in padded_word:
-
 			# fill word in with actual symbols
 			if symbol in consonant_reps:
 				numeric_rep.append(consonant_reps[symbol])
-			else if symbol in vowel_reps:
+			elif symbol in vowel_reps:
 				numeric_rep.append(vowel_reps[symbol])
 			else:
 				sys.exit("Symbol {0} from {1} not in dict".format(symbol, padded_word))
@@ -137,12 +134,12 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 
 		# right_padding
 		for _ in range(len(numeric_rep), max_length):
-			numeric_rep.append(phonetic_features_dict["_"])
+			numeric_rep.append(consonant_reps["_"])
 
 		rep.write("{0} {1} \n".format(word, " ".join(numeric_rep)))
 
 	if find_max_length:
-		if stress_index == english_stress_index:
+		if stress_index == ENG_STRESS_INDEX:
 			print("English longest string = {0}; nreps = {1}".format(test_max_length, test_max_length*4))
 		else:
 			print("Spanish longest string = {0}; nreps = {1}".format(test_max_length, test_max_length*4))
@@ -153,7 +150,7 @@ def num_reps (sampa_file, padded_sampa_file, result_file, stress_index, max_leng
 
 
 if __name__ == "__main__":
-	num_reps("en_sampa.txt", "en_sampa_syllables.txt", "l1.txt", english_stress_index, eng_max_length)
-	num_reps("es_sampa.txt", "es_sampa_syllables.txt", "l2.txt", spanish_stress_index, spanish_max_length)
+	num_reps("en_sampa.txt", "en_sampa_syllables.txt", "l1.txt", ENG_STRESS_INDEX, ENG_MAX_LENGTH)
+	num_reps("es_sampa.txt", "es_sampa_syllables.txt", "l2.txt", SPANISH_STRESS_INDEX, SPANISH_MAX_LENGTH)
 
 
