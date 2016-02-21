@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import sys
-import codecs
 # additional features: 
 # 	tap/flap = manner, 0.100
 # 	trill = manner, 0.200
@@ -62,11 +59,14 @@ phonetic_features_dict = {'_' : '0.000 0.000 0.000 0.000 0.000',
 # pad left for stress
 # when finish, pad right to equal the longest one
 
-english_stress_index = 4
+
+# stress indexes figured out manually by looking at the word where index of the primary stress character is highest
+english_stress_index = 4       
 spanish_stress_index = 10
 
-eng_max_length = 15
-spanish_max_length = 27
+# max length figured out by the find_max_length and test_max_length variables in num-reps
+eng_max_length = 14
+spanish_max_length = 25
 
 
 def num_reps (sampa_file, result_file, stress_index, max_length):
@@ -78,7 +78,7 @@ def num_reps (sampa_file, result_file, stress_index, max_length):
 	for word in sampa:
 		word = word.strip() 			# remove \n and space
 		try:
-			word_stress_index = word.index('ˈ')
+			word_stress_index = word.index('"')
 		except ValueError: 
 			word_stress_index = 0
 		new_word = word.replace(" ", "_")			# fill space with blank
@@ -111,7 +111,7 @@ def num_reps (sampa_file, result_file, stress_index, max_length):
 		for _ in range(len(numeric_rep), max_length):
 			numeric_rep.append(phonetic_features_dict["_"])
 
-		rep.write("{0}__ {1} \n".format(word, " ".join(numeric_rep)))
+		rep.write("{0} {1} \n".format(word, " ".join(numeric_rep)))
 
 	if find_max_length:
 		if stress_index == english_stress_index:
@@ -126,17 +126,5 @@ def num_reps (sampa_file, result_file, stress_index, max_length):
 if __name__ == "__main__":
 	num_reps("en_sampa.txt", "l1.txt", english_stress_index, eng_max_length)
 	num_reps("es_sampa.txt", "l2.txt", spanish_stress_index, spanish_max_length)
-
-
-
-
-
-
-
-
-
-
-
-
 
 
