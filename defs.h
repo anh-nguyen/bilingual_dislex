@@ -22,7 +22,7 @@
 #define MAXFMLABELS 10		/* max # of displayed labels per map unit
                                    (includes the nearestlabel for each) */
 #define MAXWORDS 300		/* max number of lexical & semantic words */
-#define MAXPAIRS 300		/* max number of training pairs */
+#define MAXPAIRS 60		/* max number of training pairs */
 #define MAXPHASE 10		/* max number of phases in simulation */
 #define MAXSNAPS 50		/* max number of snapshots */
 #define MAXWORDL 30		/* max length of input words (chars) */

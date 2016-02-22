@@ -104,7 +104,6 @@ iterate_pairs ()
   int pairi,				/* word pair counter */
     nl1prop, nl2prop, nsprop;			/* lex and sem number of prop units */
 
-  printf("it begins... \n");
   /* first display the current labels and clean previous activations */
   if (displaying)
     {
@@ -118,16 +117,12 @@ iterate_pairs ()
       wait_and_handle_events ();
     }
   
-
-  printf("it begins 1... \n");
   /* iterate through all word pairs */
   for (pairi = 0; pairi < npairs; pairi++)
     {
       /* first propagate from L1 to L2 and semantic */
       if (pairs[shuffletable[pairi]].l1index != NONE)
 	{
-
-    printf("inside if... \n");
 	  if (l1_running || l1l2_assoc_running || sl1_assoc_running)
 	    present_input (L1INPMOD, l1units, nl1net, l1words,
 			   pairs[shuffletable[pairi]].l1index,
@@ -154,9 +149,7 @@ iterate_pairs ()
 		}
         if (l1l2_assoc_running)
     {
-      printf("before displaylex for l2... \n");
       display_lex (L2OUTMOD, l2units, nl2net);
-        printf("after display lex ... \n");
       display_error (L2OUTMOD);
 
     }
@@ -164,7 +157,6 @@ iterate_pairs ()
 	    }
 	}
 
-  printf("it begins 2 ... \n");
         /* then propagate from L2 to L1 and semantic */
       if (pairs[shuffletable[pairi]].l2index != NONE)
   {
