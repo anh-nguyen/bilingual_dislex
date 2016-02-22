@@ -136,9 +136,9 @@ static Window
 /* text constants to be displayed */
 static char
  *titles[] =
-{"L1 LEXICAL MAP", "unused",	/* input and output L1 lexical maps are combined*/
- "L2 LEXICAL MAP", "unused",  /* input and output L2 lexical maps are combined*/
- "SEMANTIC MAP", "unused"};	/* into one window; their entries are unused */
+{"L1 LEXICAL MAP", "L2 LEXICAL MAP",	/* input and output L1 lexical maps are combined*/
+ "SEMANTIC MAP", "unused",  /* input and output L2 lexical maps are combined*/
+ "unused", "unused"};	/* into one window; their entries are unused */
 
 /* graphics contexts */
 static GC
@@ -766,8 +766,7 @@ init_lex_display (modi, nnet, nwords, words, nrep, units)
       collect_labels (modi, units[besti][bestj].labels,
 		      &units[besti][bestj].labelcount, words[k].chars);
     }
-
-  printf("inside init lex display 4\n");
+    
   /* clear the activations */
   clear_values (units, nnet);
   clear_prevvalues (units, nnet);
@@ -792,9 +791,6 @@ expose_lex (w, units, call_data)
   int
     modi = ((w == sem) ? SEMWINMOD : ((w == l1) ? L1WINMOD : L2WINMOD)),
     nnet = ((w == sem) ? nsnet : ((w == l1) ? nl1net : nl2net));
-
-  
-  printf("expose lex modi = %s\n", modi);
   
   XClearWindow (theDisplay, Win[modi]);
   display_title (modi, titles[modi]);
@@ -819,31 +815,16 @@ resize_lex (w, client_data, call_data)
 
   XFontStruct *fontstruct = ((w == sem) ? semfontStruct : ((w == l1) ? l1fontStruct : l2fontStruct));
 
-  printf("got to here...\n");
   common_resize (modi, w);	/* get new window size */
-
-
-  printf("what about here?\n");
 
   /* height of the boxes representing unit activities */
   net[modi].uhght = (net[modi].height - titleboxhght - VERSP) / nnet;
   net[modi].uwidth = (net[modi].width - 2 * HORSP) / nnet;
 
-
-  printf("modi uhght = %d\n", net[modi].uhght);
-  printf("modi uwidth = %d\n", net[modi].uwidth);
-  printf("modi height = %d\n", net[modi].height);
-  printf("modi width = %d\n", net[modi].width);
-
-  printf("got to here...\n");
-
   net[modi].maxlabels = net[modi].uhght / fontstruct->ascent;
-  
-  printf("but not here...?\n");
 
   /* horizontal margin from the edge of the window */
   net[modi].marg = (net[modi].width - nnet * net[modi].uwidth) / 2;
-  printf("net[modi].marg width = %d\n", net[modi].marg);
 }
 
 
@@ -997,11 +978,6 @@ display_lex (modi, units, nnet)
       /* only display if the activation has changed */
       if (units[i][j].value != units[i][j].prevvalue)
 	{
-
-    printf("inside display lex before frameRectangle...\n");   
-    printf ("units[i][j].value= %d \n", units[i][j].value);
-    printf ("trans_to_color (units[i][j].value, UNITCOLORS) value = %d \n", trans_to_color (units[i][j].value, UNITCOLORS));
-
     /* color the box representing unit according to activation */
 	  frameRectangle (modi, net[modi].marg + i * net[modi].uwidth,
 			  titleboxhght + j * net[modi].uhght,
@@ -1015,8 +991,6 @@ display_lex (modi, units, nnet)
 		    units[i][j].value, units[i][j].labels,
 		    units[i][j].labelcount, fontstruct,
 		    currfGC, currbGC, currnGC);
-
-    printf("inside display lex after labelbox...\n");
 	}
   XFlush (theDisplay);
 }
@@ -1104,12 +1078,8 @@ frameRectangle (modi, x, y, width, height, colorindex)
      width, height,			/* dimensions of the rectangle */
      colorindex;			/* fill color */
 {
-  printf("before fill rectangle\n");
-  printf("colorindex: %d\n", colorindex);
   fillRectangle (modi, x, y, width, height, colorindex);
-  printf("after fill rectangle\n");
   drawRectangle (modi, x, y, width, height);
-  printf("after draw rectangle\n");
 }
 
 
@@ -1221,8 +1191,6 @@ fillRectangle (modi, x, y, width, height, colorindex)
 /* draw a filled rectangle in given color */
      int modi, x, y, width, height, colorindex;
 { 
-  printf("colorindex: %d\n", colorindex);
-  printf("hi from fillRectangle\n");
   XSetForeground (theDisplay, activityGC, colors[cmap[colorindex]].pixel);
   XFillRectangle (theDisplay, Win[modi], activityGC, x, y, width, height);
 }

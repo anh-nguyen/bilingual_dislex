@@ -16,9 +16,9 @@ l2repfile bilingual-l2-reps
 srepfile bilingual-sreps
 
 # sizes (sides) of the lexical and semantic maps
-l1mapsize 40
-l2mapsize 40
-smapsize 40
+l1mapsize 15
+l2mapsize 15
+smapsize 15
 
 # random number seed
 seed 1

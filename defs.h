@@ -40,10 +40,10 @@
    which can appear in any order */
 #define L1INPMOD 0		/* module # for L1 input map  */
 #define L2INPMOD 1   /* module # for L2 input map  */
-#define SOUTMOD 2		/* module # for semantic output map  */
-#define SINPMOD 3		/* module # for semantic input map  */
-#define L1OUTMOD 4		/* module # for L1 output map  */
-#define L2OUTMOD 5    /* module # for lexical output map  */
+#define SINPMOD 2		/* module # for semantic input map  */
+#define L1OUTMOD 3		/* module # for L1 output map  */
+#define L2OUTMOD 4    /* module # for lexical output map  */
+#define SOUTMOD 5   /* module # for semantic output map  */
 #define L1WINMOD L1INPMOD	/* module # for L1 window */
 #define L2WINMOD L2INPMOD  /* module # for lex window */
 #define SEMWINMOD SINPMOD	/* module # for sem window */

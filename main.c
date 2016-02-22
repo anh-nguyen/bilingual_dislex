@@ -201,9 +201,10 @@ static String fallback_resources[] =
   "*command.right: 	ChainRight",
   "*command.top:	ChainTop",
   "*command.bottom:	ChainTop",
-  "*lex.fromVert: 	runstop",
-  "*lex.top:		ChainTop",
-  "*sem.fromVert: 	lex",
+  "*l1.fromVert: 	runstop",
+  "*l1.top:		ChainTop",
+  "*l2.fromVert:  l1",
+  "*sem.fromVert: 	l2",
 
   /* define the color defaults */
   "*foreground:	        white",
@@ -446,9 +447,7 @@ test_snapshot (epoch)
 {
   get_current_params (epoch);	/* current learning rates and neighborhoods */
   init_stats ();
-  printf("here 2 ?\n");
   iterate_pairs ();		/* run through the test set */
-  printf("here 3 ?\n");
   print_stats (epoch);		/* performance statistics */
 }
 
@@ -801,8 +800,6 @@ read_params (fp)
 
   read_till_keyword (fp, SIMU_SREPFILE, REQUIRED);
   fscanf (fp, "%s", srepfile);
-
-  printf("hi from read_till_keyword\n");
 
   read_till_keyword (fp, SIMU_L1MAPSIZE, REQUIRED);
   fscanf (fp, "%d", &nl1net);
