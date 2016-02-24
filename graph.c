@@ -322,16 +322,10 @@ display_init ()
   /* generic context for displaying unit activity */
   createGC (theMain, &activityGC, logfontStruct->fid, theBGpix, theBGpix);
 
-
-  printf(" before three resize_lexes\n");
-
   /* calculate all network geometries and put them on screen */
   resize_lex (l1, NULL, NULL);
   resize_lex (l2, NULL, NULL);
   resize_lex (sem, NULL, NULL);
-
-
-  printf(" after three resize_lexes\n");
 
   printf ("Graphics initialization complete.\n");
 }
@@ -983,7 +977,6 @@ display_lex (modi, units, nnet)
 			  titleboxhght + j * net[modi].uhght,
 			  net[modi].uwidth, net[modi].uhght,
 			  trans_to_color (units[i][j].value, UNITCOLORS));
-    printf("inside display lex after frameRectangle...\n");
 	  /* display the list of labels on the box */
 	  labelbox (modi, net[modi].marg + i * net[modi].uwidth,
 		    titleboxhght + j * net[modi].uhght,
@@ -1160,11 +1153,7 @@ trans_to_color (value, map)
      double value;			/* activation */
      int map;				/* selects a colormap */
 {
-  printf("trans_to_color units[i][j].value value = %d \n", value);
-  printf("trans_to_color map = %d \n", map);
-  printf("trans_to_color UNITCOLORS = %d \n", UNITCOLORS);
   if (map == UNITCOLORS) {
-    printf("return value of trans_to_color: %d\n", ((actual_color_range - 1) * value) + 0.499999);
     /* map the number [0,1] to corresponding color */
     return ((long) (((actual_color_range - 1) * value) + 0.499999)); }
   else

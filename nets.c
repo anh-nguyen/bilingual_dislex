@@ -158,7 +158,7 @@ iterate_pairs ()
 	}
 
         /* then propagate from L2 to L1 and semantic */
-      if (pairs[shuffletable[pairi]].l2index != NONE)
+/*      if (pairs[shuffletable[pairi]].l2index != NONE)
   {
     if (l2_running || l1l2_assoc_running || sl2_assoc_running)
       present_input (L2INPMOD, l2units, nl2net, l2words,
@@ -190,7 +190,8 @@ iterate_pairs ()
     }
         wait_and_handle_events ();
       }
-  }
+  } 
+  */
 
       /* then propagate from semantic to L1 and L2 */
       if (pairs[shuffletable[pairi]].sindex != NONE)
