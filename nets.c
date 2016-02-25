@@ -228,6 +228,7 @@ iterate_pairs ()
 	    }
 	}
 	  
+  printf("hi1\n");
       /* finally, update the 3 associations */
       if (!testing && sl1_assoc_running &&
 	  pairs[shuffletable[pairi]].l1index != NONE &&
@@ -247,14 +248,19 @@ iterate_pairs ()
 	    }
 	}
 
+  printf("hi2\n");
       if (!testing && sl2_assoc_running &&
     pairs[shuffletable[pairi]].l2index != NONE &&
     pairs[shuffletable[pairi]].sindex != NONE)
   {
+    printf("hi a\n");
     modify_assoc_weights (l2units, sunits, l2prop, nl2prop, sprop, nsprop,
         nsnet, l2sassoc, sl2_assoc_alpha);
+    printf("hi b\n");
     modify_assoc_weights (sunits, l2units, sprop, nsprop, l2prop, nl2prop,
         nl2net, sl2assoc, sl2_assoc_alpha);
+    
+    printf("hi c\n");
     if (displaying)
       { 
         display_lex (L2INPMOD, l2units, nl2net);
@@ -266,6 +272,7 @@ iterate_pairs ()
   }
   
 
+  printf("hi3\n");
       if (!testing && l1l2_assoc_running &&
     pairs[shuffletable[pairi]].l1index != NONE &&
     pairs[shuffletable[pairi]].l2index != NONE)
@@ -633,6 +640,7 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
 	alpha * iunits[iprop[i].i][iprop[i].j].value *
       	              aunits[aprop[a].i][aprop[a].j].value;
   
+
   /* normalize the associative output connections of a unit */
   for (i = 0; i < niprop; i++)
     {

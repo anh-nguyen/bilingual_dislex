@@ -1044,7 +1044,6 @@ read_input_pairs (fp)
 	  fprintf (stderr, "Wrong number of words in an input pair\n");
 	  exit (EXIT_DATA_ERROR);
 	}
-  printf (" Input pairs: %s %s %s \n", l1word, l2word, sword);
       if (strcasecmp (l1word, INP_NONE))
 	pairs[i].l1index = wordindex (l1word, l1words, nl1words);
       else
