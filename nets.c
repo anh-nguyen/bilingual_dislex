@@ -158,7 +158,7 @@ iterate_pairs ()
 	}
 
         /* then propagate from L2 to L1 and semantic */
-/*      if (pairs[shuffletable[pairi]].l2index != NONE)
+      if (pairs[shuffletable[pairi]].l2index != NONE)
   {
     if (l2_running || l1l2_assoc_running || sl2_assoc_running)
       present_input (L2INPMOD, l2units, nl2net, l2words,
@@ -191,7 +191,7 @@ iterate_pairs ()
         wait_and_handle_events ();
       }
   } 
-  */
+  
 
       /* then propagate from semantic to L1 and L2 */
       if (pairs[shuffletable[pairi]].sindex != NONE)
@@ -759,8 +759,6 @@ iterate_weights (dofun, fp, par1, par2)
       for (k = 0; k < nsrep; k++)
 	(*dofun) (fp, &sunits[i][j].comp[k], par1, par2);
 
-
-  printf("before assoc 1 \n");
   /* associative connections */
   for (i = 0; i < nl1net; i++)
     for (j = 0; j < nl1net; j++)
@@ -771,7 +769,6 @@ iterate_weights (dofun, fp, par1, par2)
 	    (*dofun) (fp, &sl1assoc[ii][jj][i][j], par1, par2);
 	  }
 
-  printf("before assoc 2 \n");
   for (i = 0; i < nl2net; i++)
     for (j = 0; j < nl2net; j++)
       for (ii = 0; ii < nsnet; ii++)
@@ -781,7 +778,6 @@ iterate_weights (dofun, fp, par1, par2)
       (*dofun) (fp, &sl2assoc[ii][jj][i][j], par1, par2);
     }
 
-  printf("before assoc 3 \n");
   for (i = 0; i < nl2net; i++)
     for (j = 0; j < nl2net; j++)
       for (ii = 0; ii < nl1net; ii++)
@@ -791,7 +787,6 @@ iterate_weights (dofun, fp, par1, par2)
       (*dofun) (fp, &l1l2assoc[ii][jj][i][j], par1, par2);
     }
 
-  printf("after assocs \n");
 }
 
 

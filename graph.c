@@ -725,17 +725,14 @@ init_lex_display (modi, nnet, nwords, words, nrep, units)
   int besti, bestj;			/* indices of the image unit */
   double best, foo;			/* best and worst response found */
 
-  printf("inside init lex display 1\n");
   /* clean up the old labels */
   clear_labels (units, nnet);
 
-  printf("inside init lex display 2\n");
   /* clean up the value for finding nearest inputs */
   for (i = 0; i < nnet; i++)
     for (j = 0; j < nnet; j++)
       units[i][j].bestvalue = LARGEFLOAT;
   
-  printf("inside init lex display 3\n");
   /* assign labels to maximally responding units for each word,
      updating nearestlabels when appropriate */
   for (k = 0; k < nwords; k++)

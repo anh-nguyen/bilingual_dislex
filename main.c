@@ -398,7 +398,12 @@ run_simulation_once ()
 	update_nextsnapshot (epoch);
 
       /* continue training from the next epoch on */
+
+      printf ("before training (++epoch)()\n");
       training (++epoch);
+
+
+      printf ("after training (++epoch)()\n");
     }
   else
     /* process each snapshot */
@@ -463,8 +468,10 @@ training (epoch)
       init_stats ();
       if (shuffling)		/* change the order of stories */
 	shuffle ();
+      printf("before interate_pairs() \n");
       iterate_pairs ();		/* run through the training set */
 
+      printf("after interate_pairs() \n");
       /* log the progress of training error */
       printf ("Epoch %d errors: ", epoch);
       write_error (stdout);
