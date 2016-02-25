@@ -633,6 +633,14 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
   int i, a, ii, jj;
   float sum;
 
+  if (aunits == l2units) {
+    printf ("hi l2units 0\n");
+    printf ("niprop = %d\n", niprop);
+    printf ("naprop = %d\n", naprop);
+
+    printf ("aprop = %d\n", aprop);
+  }
+
   /* modify the associative connections through Hebbian learning  */
   for (i = 0; i < niprop; i++)
     for (a = 0; a < naprop; a++)
@@ -640,6 +648,10 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
 	alpha * iunits[iprop[i].i][iprop[i].j].value *
       	              aunits[aprop[a].i][aprop[a].j].value;
   
+
+  if (aunits == l2units) {
+    printf ("hi l2units 1\n");
+  }
 
   /* normalize the associative output connections of a unit */
   for (i = 0; i < niprop; i++)
@@ -654,6 +666,11 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
 	for ( jj = 0; jj < nanet; jj++)
 	  assoc[iprop[i].i][iprop[i].j][ii][jj] /= sum;
     }	  
+
+
+  if (aunits == l2units) {
+    printf ("hi l2units 2 \n");
+  }
 }
 
 
