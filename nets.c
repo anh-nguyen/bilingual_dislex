@@ -227,8 +227,7 @@ iterate_pairs ()
 	      wait_and_handle_events ();
 	    }
 	}
-	  
-  printf("hi1\n");
+
       /* finally, update the 3 associations */
       if (!testing && sl1_assoc_running &&
 	  pairs[shuffletable[pairi]].l1index != NONE &&
@@ -248,19 +247,15 @@ iterate_pairs ()
 	    }
 	}
 
-  printf("hi2\n");
       if (!testing && sl2_assoc_running &&
     pairs[shuffletable[pairi]].l2index != NONE &&
     pairs[shuffletable[pairi]].sindex != NONE)
   {
-    printf("hi a\n");
     modify_assoc_weights (l2units, sunits, l2prop, nl2prop, sprop, nsprop,
         nsnet, l2sassoc, sl2_assoc_alpha);
-    printf("hi b\n");
     modify_assoc_weights (sunits, l2units, sprop, nsprop, l2prop, nl2prop,
         nl2net, sl2assoc, sl2_assoc_alpha);
     
-    printf("hi c\n");
     if (displaying)
       { 
         display_lex (L2INPMOD, l2units, nl2net);
@@ -271,8 +266,6 @@ iterate_pairs ()
       }
   }
   
-
-  printf("hi3\n");
       if (!testing && l1l2_assoc_running &&
     pairs[shuffletable[pairi]].l1index != NONE &&
     pairs[shuffletable[pairi]].l2index != NONE)
@@ -291,7 +284,6 @@ iterate_pairs ()
       }
   }
     }
-
 
 }
 
@@ -633,25 +625,14 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
   int i, a, ii, jj;
   float sum;
 
-  if (aunits == l2units) {
-    printf ("hi l2units 0\n");
-    printf ("niprop = %d\n", niprop);
-    printf ("naprop = %d\n", naprop);
-
-    printf ("aprop = %d\n", aprop);
-  }
-
   /* modify the associative connections through Hebbian learning  */
-  for (i = 0; i < niprop; i++)
-    for (a = 0; a < naprop; a++)
+  for (i = 0; i < niprop; i++) {
+    for (a = 0; a < naprop; a++) {
       assoc[iprop[i].i][iprop[i].j][aprop[a].i][aprop[a].j] += 
 	alpha * iunits[iprop[i].i][iprop[i].j].value *
       	              aunits[aprop[a].i][aprop[a].j].value;
-  
-
-  if (aunits == l2units) {
-    printf ("hi l2units 1\n");
-  }
+      } 
+    }
 
   /* normalize the associative output connections of a unit */
   for (i = 0; i < niprop; i++)
@@ -664,13 +645,8 @@ modify_assoc_weights (iunits, aunits, iprop, niprop, aprop, naprop, nanet,
       sum = sqrt (sum);
       for (ii = 0; ii < nanet; ii++)
 	for ( jj = 0; jj < nanet; jj++)
-	  assoc[iprop[i].i][iprop[i].j][ii][jj] /= sum;
+	   assoc[iprop[i].i][iprop[i].j][ii][jj] /= sum;
     }	  
-
-
-  if (aunits == l2units) {
-    printf ("hi l2units 2 \n");
-  }
 }
 
 

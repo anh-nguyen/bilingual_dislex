@@ -44,9 +44,9 @@ FMUNIT l1units[MAXLSNET][MAXLSNET], /* L1 feature map */
 
 double
   l1sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* L1->sem assoc */
-  sl1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; /* sem->L1 assoc */
+  sl1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* sem->L1 assoc */
   l2sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* L2->sem assoc */
-  sl2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; /* sem->L2 assoc */
+  sl2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* sem->L2 assoc */
   l1l2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], /* L1->L2 assoc */
   l2l1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; /* L2->L1 assoc */
 
@@ -68,8 +68,8 @@ double
   l1_alpha,			/* L1 map learning rate */
   l2_alpha,     /* L2 map learning rate */
   sem_alpha,			/* semantic map learning rate */
-  l1l2_assoc_alpha;			/* associative connections learning rate */
-  sl1_assoc_alpha;      /* associative connections learning rate */
+  l1l2_assoc_alpha,			/* associative connections learning rate */
+  sl1_assoc_alpha,      /* associative connections learning rate */
   sl2_assoc_alpha;      /* associative connections learning rate */
 int
   l1_nc,			/* L1 neighborhood size */
@@ -78,8 +78,8 @@ int
   l1_running,			/* whether L1 is running this phase */
   l2_running,     /* whether L2 is running this phase */
   sem_running,			/* whether sem is running this phase */
-  l1l2_assoc_running;		/* whether L1 to L2 assoc is running this phase */
-  sl1_assoc_running;    /* whether Sem to L1 assoc is running this phase */
+  l1l2_assoc_running,		/* whether L1 to L2 assoc is running this phase */
+  sl1_assoc_running,    /* whether Sem to L1 assoc is running this phase */
   sl2_assoc_running;    /* whether Sem to L2 assoc is running this phase */
 
 /* simulation flags */
@@ -182,9 +182,9 @@ extern FMUNIT l1units[MAXLSNET][MAXLSNET],
   sunits[MAXLSNET][MAXLSNET];
 extern double
   l1sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], 
-  sl1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; 
+  sl1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET],
   l2sassoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], 
-  sl2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET]; 
+  sl2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET], 
   l1l2assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET],
   l2l1assoc[MAXLSNET][MAXLSNET][MAXLSNET][MAXLSNET];
 

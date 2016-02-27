@@ -16,9 +16,9 @@ l2repfile bilingual-l2-reps
 srepfile bilingual-sreps
 
 # sizes (sides) of the lexical and semantic maps
-l1mapsize 16
-l2mapsize 16
-smapsize 16
+l1mapsize 10
+l2mapsize 10
+smapsize 10
 
 # random number seed
 seed 1
@@ -27,7 +27,7 @@ seed 1
 shuffling 1
 
 # last epoch of this simulation (starting from epoch 1)
-simulationendepoch 150
+simulationendepoch 1500
 
 # store snapshots of feature map and associative weights after these epochs
 # epoch 0 means the initial state is stored
@@ -57,7 +57,7 @@ snapshotepochs 0
 #  neighborhood numbers under each epoch number are first established exactly
 #  at that epoch.
 #
-phase-firstepochs	1	51	101	151
+phase-firstepochs	1	51	101	1501
 l1-alphas		0.1	0.05	0.025	0
 l2-alphas		0.1	0.05	0.025	0
 sem-alphas		0.1	0.05	0.025	0
