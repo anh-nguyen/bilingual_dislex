@@ -15,6 +15,8 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
+#include <stdlib.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 
@@ -89,6 +91,7 @@ static void modify_assoc_weights __P ((FMUNIT iunits[MAXLSNET][MAXLSNET],
 static int clip __P((int index, int limit, int (*comparison) (int, int)));
 static int ige __P((int i, int j));
 static int ile __P((int i, int j));
+static bool bool_with_prob __P ((double probability));
 
 
 /*******************  main wordpair processing loop  **********************/
@@ -120,10 +123,16 @@ iterate_pairs ()
   /* iterate through all word pairs */
   for (pairi = 0; pairi < npairs; pairi++)
     {
+      bool train_l1 = bool_with_prob(l1_exposure);
+      bool train_l2 = bool_with_prob(l2_exposure);
+      printf("l1 %d \n", train_l1);
+      printf("l2 %d \n", train_l2);
+      printf("l1 %s \n", train_l1 ? "true" : "false");
+      printf("l2 %s \n", train_l2 ? "true" : "false");
       /* first propagate from L1 to L2 and semantic */
-      if (pairs[shuffletable[pairi]].l1index != NONE)
+      if (pairs[shuffletable[pairi]].l1index != NONE && train_l1)
 	{
-	  if (l1_running || l1l2_assoc_running || sl1_assoc_running)
+	  if ((l1_running || l1l2_assoc_running || sl1_assoc_running))
 	    present_input (L1INPMOD, l1units, nl1net, l1words,
 			   pairs[shuffletable[pairi]].l1index,
 			   l1prop, &nl1prop, l1_nc); 
@@ -158,9 +167,9 @@ iterate_pairs ()
 	}
 
         /* then propagate from L2 to L1 and semantic */
-      if (pairs[shuffletable[pairi]].l2index != NONE)
+      if (pairs[shuffletable[pairi]].l2index != NONE && train_l2)
   {
-    if (l2_running || l1l2_assoc_running || sl2_assoc_running)
+    if ((l2_running || l1l2_assoc_running || sl2_assoc_running))
       present_input (L2INPMOD, l2units, nl2net, l2words,
          pairs[shuffletable[pairi]].l2index,
          l2prop, &nl2prop, l2_nc);
@@ -229,7 +238,7 @@ iterate_pairs ()
 	}
 
       /* finally, update the 3 associations */
-      if (!testing && sl1_assoc_running &&
+      if (!testing && sl1_assoc_running && train_l1 &&
 	  pairs[shuffletable[pairi]].l1index != NONE &&
 	  pairs[shuffletable[pairi]].sindex != NONE)
 	{
@@ -247,7 +256,7 @@ iterate_pairs ()
 	    }
 	}
 
-      if (!testing && sl2_assoc_running &&
+      if (!testing && sl2_assoc_running && train_l2 &&
     pairs[shuffletable[pairi]].l2index != NONE &&
     pairs[shuffletable[pairi]].sindex != NONE)
   {
@@ -266,7 +275,7 @@ iterate_pairs ()
       }
   }
   
-      if (!testing && l1l2_assoc_running &&
+      if (!testing && l1l2_assoc_running && train_l1 && train_l2 &&
     pairs[shuffletable[pairi]].l1index != NONE &&
     pairs[shuffletable[pairi]].l2index != NONE)
   {
@@ -876,5 +885,17 @@ clear_labels (units, nnet)
 	units[i][j].labelcount = 1;	/* reserve 0 for nearestlabel */
 	sprintf(units[i][j].labels[0], "%s", ""); /* none to begin with */
       }
+}
+
+bool
+bool_with_prob (probability)
+    /* returns a boolean with indicated probability of returning 1 */
+    double probability;
+{
+  double hi = (double)((double)rand()/(double)RAND_MAX);
+  printf ("hi = %lf probability = %lf \n", hi);
+  if (hi <= probability)
+    return true;
+  else return false;
 }
 

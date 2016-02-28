@@ -65,6 +65,8 @@ int ninprep[NMODULES],		/* input vector dimension */
 
 /* learning rates, neighborhoods, running */
 double
+  l1_exposure,  /* L1 exposure parameter */
+  l2_exposure,  /* L2 exposure parameter */
   l1_alpha,			/* L1 map learning rate */
   l2_alpha,     /* L2 map learning rate */
   sem_alpha,			/* semantic map learning rate */
@@ -143,6 +145,8 @@ extern char
   simufile[MAXFILENAMEL + 1],
   current_inpfile[MAXFILENAMEL + 1];
 extern double
+  l1_exposure,
+  l2_exposure,
   l1_alpha,
   l2_alpha,
   sem_alpha,  

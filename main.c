@@ -44,6 +44,8 @@
 #define SIMU_L1MAPSIZE "l1mapsize"
 #define SIMU_L2MAPSIZE "l2mapsize"
 #define SIMU_SMAPSIZE "smapsize"
+#define SIMU_L1_EXPOSURE "l1exposure"
+#define SIMU_L2_EXPOSURE "l2exposure"
 #define SIMU_SEED "seed"
 #define SIMU_SHUFFLING "shuffling"
 #define SIMU_SIMULATIONENDEPOCH "simulationendepoch"
@@ -831,6 +833,12 @@ read_params (fp)
       fprintf (stderr, "%s exceeds array size\n", SIMU_SMAPSIZE);
       exit (EXIT_SIZE_ERROR);
     }
+
+  read_till_keyword (fp, SIMU_L1_EXPOSURE, REQUIRED);
+  fscanf (fp, "%lf", &l1_exposure);
+
+  read_till_keyword (fp, SIMU_L2_EXPOSURE, REQUIRED);
+  fscanf (fp, "%lf", &l2_exposure);
 
   read_till_keyword (fp, SIMU_SEED, REQUIRED);
   fscanf (fp, "%d", &seed);
