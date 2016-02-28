@@ -892,10 +892,6 @@ bool_with_prob (probability)
     /* returns a boolean with indicated probability of returning 1 */
     double probability;
 {
-  double hi = (double)((double)rand()/(double)RAND_MAX);
-  printf ("hi = %lf probability = %lf \n", hi);
-  if (hi <= probability)
-    return true;
-  else return false;
+  return ((double)((double)rand()/(double)RAND_MAX) <= probability);
 }
 
