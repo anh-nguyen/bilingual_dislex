@@ -136,7 +136,7 @@ static Window
 /* text constants to be displayed */
 static char
  *titles[] =
-{"L1 LEXICAL MAP", "L2 LEXICAL MAP",	/* input and output L1 lexical maps are combined*/
+{"L1 MAP", "L2 MAP",	/* input and output L1 lexical maps are combined*/
  "SEMANTIC MAP", "unused",  /* input and output L2 lexical maps are combined*/
  "unused", "unused"};	/* into one window; their entries are unused */
 
