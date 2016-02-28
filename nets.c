@@ -890,6 +890,7 @@ clear_labels (units, nnet)
 bool
 bool_with_prob (probability)
     /* returns a boolean with indicated probability of returning 1 */
+    /* reference: http://stackoverflow.com/questions/3771551/how-to-generate-a-boolean-with-p-probability-using-c-rand-function */
     double probability;
 {
   return ((double)((double)rand()/(double)RAND_MAX) <= probability);
