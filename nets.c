@@ -125,10 +125,7 @@ iterate_pairs ()
     {
       bool train_l1 = bool_with_prob(l1_exposure);
       bool train_l2 = bool_with_prob(l2_exposure);
-      printf("l1 %d \n", train_l1);
-      printf("l2 %d \n", train_l2);
-      printf("l1 %s \n", train_l1 ? "true" : "false");
-      printf("l2 %s \n", train_l2 ? "true" : "false");
+      
       /* first propagate from L1 to L2 and semantic */
       if (pairs[shuffletable[pairi]].l1index != NONE && train_l1)
 	{
