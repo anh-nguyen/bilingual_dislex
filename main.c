@@ -160,8 +160,8 @@ static double
   l1_a[MAXPHASE + 1], *l1_alphas, 	/* L1 alphas for each phase */
   l2_a[MAXPHASE + 1], *l2_alphas,   /* L2 alphas for each phase */
   s_a[MAXPHASE + 1], *sem_alphas,	/* semmap alphas for each phase */
-  l1l2_a_a[MAXPHASE + 1], *l1l2_assoc_alphas;	/* assoc alphas for each phase */
-  sl1_a_a[MAXPHASE + 1], *sl1_assoc_alphas; /* assoc alphas for each phase */
+  l1l2_a_a[MAXPHASE + 1], *l1l2_assoc_alphas,	/* assoc alphas for each phase */
+  sl1_a_a[MAXPHASE + 1], *sl1_assoc_alphas, /* assoc alphas for each phase */
   sl2_a_a[MAXPHASE + 1], *sl2_assoc_alphas; /* assoc alphas for each phase */
 static int
   l1_n[MAXPHASE + 1], *l1_ncs,	/* L1 neighborhood sizes per phase */
@@ -170,8 +170,8 @@ static int
   l1_runnings[MAXPHASE],	/* whether L1 is running this phase */
   l2_runnings[MAXPHASE],  /* whether L2 is running this phase */
   sem_runnings[MAXPHASE],	/* whether sem is running this phase */
-  l1l2_assoc_runnings[MAXPHASE];	/* whether L1 L2 assoc is running this phase */
-  sl1_assoc_runnings[MAXPHASE]; /* whether Sem L1 assoc is running this phase */
+  l1l2_assoc_runnings[MAXPHASE],	/* whether L1 L2 assoc is running this phase */
+  sl1_assoc_runnings[MAXPHASE], /* whether Sem L1 assoc is running this phase */
   sl2_assoc_runnings[MAXPHASE]; /* whether Sem L2 assoc is running this phase */
 
 /* define the geometry of the display */
