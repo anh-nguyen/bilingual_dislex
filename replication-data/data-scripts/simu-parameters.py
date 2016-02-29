@@ -2,11 +2,14 @@ from __future__ import division
 import sys
 from math import exp, ceil
 
-POSITIVE_CONSTANT = 2
+# Formulas for time constant, neighborhood size, and learning rate decay from:
+#	http://chem-eng.utoronto.ca/~datamining/Presentations/SOM.pdf and
+# 	http://www.ai-junkie.com/ann/som/som3.html
 
-
-def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborhood, l2, l2_start_epoch, maps, assocs):
+def make_simu_data (patient_file, last_epoch, alpha, starting_radius, l2, l2_start_epoch, maps, assocs):
 	
+	time_constant = last_epoch / starting_radius
+
 	patient = open(patient_file, "w")
 
 	phase_firstepochs = []
@@ -36,12 +39,12 @@ def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborh
 				if i < l2_start_epoch:
 					map_ncs[m].append(0)
 				else:
-					map_ncs[m].append(ceil(variance_gaussian_neighborhood*(exp((0-(i+1-l2_start_epoch))/POSITIVE_CONSTANT))))
+					map_ncs[m].append(ceil(starting_radius*(exp((0-(i+1-l2_start_epoch))/time_constant))))
 			else:
 				if i == 1:
-					map_ncs[m].append(variance_gaussian_neighborhood)
+					map_ncs[m].append(starting_radius)
 			 	else: 
-			 		map_ncs[m].append(ceil(variance_gaussian_neighborhood*(exp((0-i)/POSITIVE_CONSTANT))))
+			 		map_ncs[m].append(ceil(starting_radius*(exp((0-i)/time_constant))))
 
 			if m == l2 and i + 155 < l2_start_epoch:
 				map_running[m].append(0)
@@ -59,9 +62,9 @@ def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborh
 			for m in maps:
 				map_alphas[m].append(alpha)
 				if m == l2:
-					map_ncs[m].append(variance_gaussian_neighborhood)
+					map_ncs[m].append(starting_radius)
 				else:
-					map_ncs[m].append(ceil(variance_gaussian_neighborhood*(exp(-l2_start_epoch/POSITIVE_CONSTANT))))
+					map_ncs[m].append(ceil(starting_radius*(exp(-l2_start_epoch/time_constant))))
 				
 				map_running[m].append(1)
 			for a in assocs:
@@ -73,12 +76,12 @@ def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborh
 	patient.write("{}\n".format("\t".join([str(x) for x in phase_firstepochs])))
 	
 	for m in maps:
-		patient.write("{0}\n".format("\t".join([str(x) for x in map_alphas[m]])))
+		patient.write("{0}\n".format("\t".join([str(x) for x in map_alphas[m] + [0]])))
 	for a in assocs:
-		patient.write("{0}\n".format("\t".join([str(x) for x in assoc_alphas[a]])))
+		patient.write("{0}\n".format("\t".join([str(x) for x in assoc_alphas[a] + [0]])))
 
 	for m in maps:
-		patient.write("{0}\n".format("\t".join([str(x) for x in map_ncs[m]])))
+		patient.write("{0}\n".format("\t".join([str(x) for x in map_ncs[m] + [0]])))
 
 	for m in maps:
 		patient.write("{0}\n".format("\t".join([str(x) for x in map_running[m]])))
@@ -89,10 +92,6 @@ def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborh
 
 if __name__ == "__main__":
 	make_simu_data("UTBA18.txt", 1400, 0.25, 3, "l2", 180, ["l1", "l2", "sem"], ["l1l2", "sl1", "sl2"])
-
-
-
-
 
 
 
