@@ -1,6 +1,6 @@
 from __future__ import division
 import sys
-from math import exp
+from math import exp, ceil
 
 POSITIVE_CONSTANT = 2
 
@@ -32,13 +32,16 @@ def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborh
 		phase_firstepochs.append(i)
 		for m in maps:
 			map_alphas[m].append(alpha)
-			if m== 12:
+			if m == l2:
 				if i < l2_start_epoch:
 					map_ncs[m].append(0)
 				else:
-					map_ncs[m].append(variance_gaussian_neighborhood*(exp((0-(i+1-l2_start_epoch))/POSITIVE_CONSTANT)))
+					map_ncs[m].append(ceil(variance_gaussian_neighborhood*(exp((0-(i+1-l2_start_epoch))/POSITIVE_CONSTANT))))
 			else:
-			 	map_ncs[m].append(variance_gaussian_neighborhood*(exp((0-i)/POSITIVE_CONSTANT)))
+				if i == 1:
+					map_ncs[m].append(variance_gaussian_neighborhood)
+			 	else: 
+			 		map_ncs[m].append(ceil(variance_gaussian_neighborhood*(exp((0-i)/POSITIVE_CONSTANT))))
 
 			if m == l2 and i + 155 < l2_start_epoch:
 				map_running[m].append(0)
@@ -58,7 +61,7 @@ def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborh
 				if m == l2:
 					map_ncs[m].append(variance_gaussian_neighborhood)
 				else:
-					map_ncs[m].append(variance_gaussian_neighborhood*(exp(-l2_start_epoch/POSITIVE_CONSTANT)))
+					map_ncs[m].append(ceil(variance_gaussian_neighborhood*(exp(-l2_start_epoch/POSITIVE_CONSTANT))))
 				
 				map_running[m].append(1)
 			for a in assocs:
@@ -69,17 +72,17 @@ def make_simu_data (patient_file, last_epoch, alpha, variance_gaussian_neighborh
 	phase_firstepochs.append(last_epoch+1)
 	patient.write("{}\n".format("\t".join([str(x) for x in phase_firstepochs])))
 	
-	for m in map_alphas:
+	for m in maps:
 		patient.write("{0}\n".format("\t".join([str(x) for x in map_alphas[m]])))
-	for a in assoc_alphas:
+	for a in assocs:
 		patient.write("{0}\n".format("\t".join([str(x) for x in assoc_alphas[a]])))
 
-	for m in map_ncs:
+	for m in maps:
 		patient.write("{0}\n".format("\t".join([str(x) for x in map_ncs[m]])))
 
-	for m in map_running:
+	for m in maps:
 		patient.write("{0}\n".format("\t".join([str(x) for x in map_running[m]])))
-	for a in assoc_running:
+	for a in assocs:
 		patient.write("{0}\n".format("\t".join([str(x) for x in assoc_running[a]])))
 
 	patient.close()

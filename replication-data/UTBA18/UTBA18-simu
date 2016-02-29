@@ -8,17 +8,17 @@
 # First the simulation parameters:
 
 # inputfile lists the lexical -- semantic word pairs to be presented
-inputfile UTBA18-input-pairs
+inputfile /replication-data/data-scripts/UTBA18/UTBA18-input-pairs
 
 # names of the lexical and semantic representation files
-l1repfile UTBA18-l1-reps
-l2repfile UTBA18-l2-reps
-srepfile UTBA18-sreps
+l1repfile /replication-data/data-scripts/UTBA18/UTBA18-l1-reps
+l2repfile /replication-data/data-scripts/UTBA18/UTBA18-l2-reps
+srepfile /replication-data/data-scripts/UTBA18/UTBA18-sreps
 
 # sizes (sides) of the lexical and semantic maps
-l1mapsize 16
-l2mapsize 16
-smapsize 16
+l1mapsize 20
+l2mapsize 20
+smapsize 20
 
 # exposure parameters
 l1exposure 0.125
@@ -31,7 +31,7 @@ seed 1
 shuffling 1
 
 # last epoch of this simulation (starting from epoch 1)
-simulationendepoch 1400
+simulationendepoch 1
 
 # store snapshots of feature map and associative weights after these epochs
 # epoch 0 means the initial state is stored
@@ -61,22 +61,22 @@ snapshotepochs 0
 #  neighborhood numbers under each epoch number are first established exactly
 #  at that epoch.
 #
-phase-firstepochs	1	180	335	490	645	800	955	1110	1265	1401
-l1-alphas		0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0	
-l2-alphas		0	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
-sem-alphas		0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
-l1l2-assoc-alphas	0	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
-sl1-assoc-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
-sl2-assoc-alphas	0	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
-l1-ncs			3	1.5	0.02	0
-l2-ncs			0	3	1	0
-sem-ncs			3	1.5	0.02	0
-l1-running		1	1	1	1	1	1	1	1	1	
-l2-running		0	1	1	1	1	1	1	1	1
-sem-running		1	1	1	1	1	1	1	1	1
-l1l2-assoc-running	0	1	1	1	1	1	1	1	1
-sl1-assoc-running	1	1	1	1	1	1	1	1	1
-sl2-assoc-running	0	1	1	1	1	1	1	1	1
+phase-firstepochs	1	156	180	311	466	621	776	931	1086	1241	1396	1401
+l1-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+l2-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+sem-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+l1l2-assoc-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+sl1-assoc-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+sl2-assoc-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+l1-ncs	3	1.0	1.0	1.0	1.0	1.0	1.0	1.0	1.0	1.0	1.0	0
+l2-ncs	0	0	3	1.0	1.0	1.0	1.0	1.0	1.0	1.0	1.0	0
+sem-ncs	3	1.0	1.0	1.0	1.0	1.0	1.0	1.0	1.0	1.0	1.0	0
+l1-running		1	1	1	1	1	1	1	1	1	1	1
+l2-running	0	1	1	1	1	1	1	1	1	1	1
+sem-running	1	1	1	1	1	1	1	1	1	1	1
+l1l2-assoc-running	0	0	1	1	1	1	1	1	1	1	1
+sl1-assoc-running	1	1	1	1	1	1	1	1	1	1	1	
+sl2-assoc-running	0	0	1	1	1	1	1	1	1	1	1
 
 # The snapshots are stored below. Each one consists of the snapshot epoch,
 #  feature map weights, and associative weights.
