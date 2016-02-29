@@ -18,12 +18,12 @@
 /* These constants define the maximum sizes of tables that hold data
    and the network weights and representations */
 #define MAXREP 210		/* max size of lexical & semantic reps */
-#define MAXLSNET 20		/* max size of lexicon feature maps (side) */
+#define MAXLSNET 25		/* max size of lexicon feature maps (side) */
 #define MAXFMLABELS 10		/* max # of displayed labels per map unit
                                    (includes the nearestlabel for each) */
 #define MAXWORDS 300		/* max number of lexical & semantic words */
 #define MAXPAIRS 60		/* max number of training pairs */
-#define MAXPHASE 10		/* max number of phases in simulation */
+#define MAXPHASE 50		/* max number of phases in simulation */
 #define MAXSNAPS 50		/* max number of snapshots */
 #define MAXWORDL 30		/* max length of input words (chars) */
 #define MAXFILENAMEL 100	/* max length of file names (chars) */
