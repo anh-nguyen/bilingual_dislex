@@ -1,0 +1,85 @@
+#
+# simu -- the simulation specification file.
+#
+# The file consists of a number of simulation parameters and one or more 
+#  snapshots of the simulation. Do not change the order of parameters
+#  or leave anything out. You can add comments though.
+#
+# First the simulation parameters:
+
+# inputfile lists the lexical -- semantic word pairs to be presented
+inputfile replication-input-pairs
+
+# names of the lexical and semantic representation files
+l1repfile replication-l1-reps
+l2repfile replication-l2-reps
+srepfile replication-sreps
+
+# sizes (sides) of the lexical and semantic maps
+l1mapsize 20
+l2mapsize 20
+smapsize 20
+
+# exposure parameters
+l1exposure 0.32
+l2exposure 0.2
+
+# random number seed
+seed 1
+
+# whether to present the training stories in a random order (0/1)
+shuffling 1
+
+# last epoch of this simulation (starting from epoch 1)
+simulationendepoch 1700
+
+# store snapshots of feature map and associative weights after these epochs
+# epoch 0 means the initial state is stored
+snapshotepochs 1700
+
+# Different learning rates and neighborhood sizes are used at different
+#  stages of the simulation: 
+# The phases are defined by giving the first epoch of each phase, starting
+#  from epoch 1, and ending with the epoch after the last epoch of the last 
+#  phase. In the program these epoch numbers are changed to lastepochs, and
+#  the first firstepoch is ignored (simulation always starts from epoch 1).
+# For each firstepoch, then specify the alphas and the neighborhood radii.
+#  The given number is first used during the firstepoch, and over the phase
+#  linearly decreased towards the number specified under the next firstepoch,
+#  and becomes exactly that number for the first time during that next
+#  firstepoch. 
+# The neighborhood size is given as the maximum distance in the x or y
+#  direction from the image unit. Nc of 1, for example, therefore defines 
+#  a neighborhood of up to 9 units.
+# For each phase, then specify (with 0/1) whether the network is run during
+#  the epoch. Note that there are one fewer numbers in each of the running
+#  rows than in the firstepoch row. The "running" parameters allow you
+#  to e.g. train the maps first before organizing the associative connections.
+# The reason for listing the phase parameters this way (instead of using
+#  the phase-lastepochs directly) is that when the numbers are lined up,
+#  it is easy to see how the simulation progresses. The running, alpha and
+#  neighborhood numbers under each epoch number are first established exactly
+#  at that epoch.
+#
+
+phase-firstepochs	1	156	300	311	466	621	776	931	1086	1241	1396	1551	1701
+l1-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+l2-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+sem-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+l1l2-assoc-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+sl1-assoc-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+sl2-assoc-alphas	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0.25	0
+l1-ncs	3	3.0	2.0	2.0	2.0	2.0	1.0	1.0	1.0	1.0	1.0	1.0	0
+l2-ncs	0	0	3	3.0	3.0	2.0	2.0	1.0	1.0	1.0	1.0	1.0	0
+sem-ncs	3	3.0	2.0	2.0	2.0	2.0	1.0	1.0	1.0	1.0	1.0	1.0	0
+l1-running	1	1	1	1	1	1	1	1	1	1	1	1
+l2-running	0	1	1	1	1	1	1	1	1	1	1	1
+sem-running	1	1	1	1	1	1	1	1	1	1	1	1
+l1l2-assoc-running	0	0	1	1	1	1	1	1	1	1	1	1
+sl1-assoc-running	1	1	1	1	1	1	1	1	1	1	1	1
+sl2-assoc-running	0	0	1	1	1	1	1	1	1	1	1	1
+
+# The snapshots are stored below. Each one consists of the snapshot epoch,
+#  feature map weights, and associative weights.
+# Do not put any comments or other junk inside the snapshot definition.
+#  You can add comments between snapshots though.

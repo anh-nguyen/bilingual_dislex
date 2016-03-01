@@ -370,10 +370,8 @@ run_simulation_once ()
       iterate_weights (randfun, NULL, WEIGHTLOW, WEIGHTSPAN);
       normalize_all_assocweights ();
 
-      printf ("after randfun and normalization\n");
       /* read all snapshots, getting current weights and epoch */
       read_and_process_snapshots (&epoch);
-      printf ("after read_and_process_snapshots\n");
 
       /* update shuffling (so that we can continue where we left off) */
       if (shuffling)
@@ -400,12 +398,7 @@ run_simulation_once ()
 	update_nextsnapshot (epoch);
 
       /* continue training from the next epoch on */
-
-      printf ("before training (++epoch)()\n");
       training (++epoch);
-
-
-      printf ("after training (++epoch)()\n");
     }
   else
     /* process each snapshot */
