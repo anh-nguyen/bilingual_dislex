@@ -42,7 +42,7 @@
 #define L2INPMOD 1   /* module # for L2 input map  */
 #define SINPMOD 2		/* module # for semantic input map  */
 #define L1OUTMOD 3		/* module # for L1 output map  */
-#define L2OUTMOD 4    /* module # for lexical output map  */
+#define L2OUTMOD 4    /* module # for L2 output map  */
 #define SOUTMOD 5   /* module # for semantic output map  */
 #define L1WINMOD L1INPMOD	/* module # for L1 window */
 #define L2WINMOD L2INPMOD  /* module # for lex window */
