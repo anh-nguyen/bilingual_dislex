@@ -29,34 +29,34 @@ def lesion_assocs (patient_file, lesion_file, map_sizes, num_reps, noise_amount)
 	# iterate until we reach assoc weights
 	for line in patient:	# starting from network-weights
 		line_num += 1
-		if line_num == assocs_start:
-			break
 		lesioned.write(line)
+		if line_num == assocs_start - 1:
+			break
 
 	# add noise to sl1 weights
 	for line in patient:
-		if line_num == sl2_start:
-			break
+		line_num += 1
 		orig = float(line.strip())
 		with_noise = orig + gauss(GAUSSIAN_MEAN, noise_amount["sl1"])
 		lesioned.write("{}\n".format(with_noise))
-		line_num += 1
+		if line_num == sl2_start - 1:
+			break
 
 	for line in patient:
-		if line_num == l1l2_start:
-			break
+		line_num += 1
 		orig = float(line.strip())
 		with_noise = orig + gauss(GAUSSIAN_MEAN, noise_amount["sl2"])
 		lesioned.write("{}\n".format(with_noise))
-		line_num += 1
+		if line_num == l1l2_start - 1:
+			break
 
 	for line in patient:
-		if line_num > l1l2_inclusive_end:
-			break
+		line_num += 1
 		orig = float(line.strip())
 		with_noise = orig + gauss(GAUSSIAN_MEAN, noise_amount["l1l2"])
 		lesioned.write("{}\n".format(with_noise))
-		line_num += 1
+		if line_num == l1l2_inclusive_end:
+			break
 
 if __name__ == "__main__":
 	map_sizes = {"l1": 20, "l2": 20, "sem": 20}
