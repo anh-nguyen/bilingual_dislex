@@ -900,6 +900,7 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
       sprintf (net[srcmodi].log, "Source unit: %s",
 	       srcwords[find_nearest (srcunits[uniti][unitj].comp,
 				      srcwords, nsrcrep, nsrcwords)].chars);
+
       display_log (srcmodi);
 
       /* establish values to be displayed as activations on the assoc map */
@@ -912,6 +913,7 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
 	    updatebestworst (&best, &foo, &besti, &bestj, &tgtunits[i][j],
 			     i, j, fgreater, fsmaller);
 	  }
+
       display_lex (tgtmodi, tgtunits, ntgtnet);
       sprintf (net[tgtmodi].log, "Assoc weights: %s",
 	       tgtwords[find_nearest (tgtunits[besti][bestj].comp,

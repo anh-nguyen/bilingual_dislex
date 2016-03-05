@@ -42,6 +42,7 @@ def lesion_assocs (patient_file, lesion_file, map_sizes, num_reps, noise_amount,
 		line_num += 1
 		orig = float(line.strip())
 		with_noise = orig + gauss(GAUSSIAN_MEAN, noise_amount["sl1"])
+		with_noise = with_noise if with_noise > 0 else 0
 		lesioned.write("{:.6f}\n".format(with_noise))
 		if line_num == sl2_start - 1:
 			break
@@ -50,6 +51,7 @@ def lesion_assocs (patient_file, lesion_file, map_sizes, num_reps, noise_amount,
 		line_num += 1
 		orig = float(line.strip())
 		with_noise = orig + gauss(GAUSSIAN_MEAN, noise_amount["sl2"])
+		with_noise = with_noise if with_noise > 0 else 0
 		lesioned.write("{:.6f}\n".format(with_noise))
 		if line_num == l1l2_start - 1:
 			break
@@ -58,6 +60,7 @@ def lesion_assocs (patient_file, lesion_file, map_sizes, num_reps, noise_amount,
 		line_num += 1
 		orig = float(line.strip())
 		with_noise = orig + gauss(GAUSSIAN_MEAN, noise_amount["l1l2"])
+		with_noise = with_noise if with_noise > 0 else 0
 		lesioned.write("{:.6f}\n".format(with_noise))
 		if line_num == l1l2_inclusive_end:
 			break
@@ -66,7 +69,7 @@ if __name__ == "__main__":
 	map_sizes = {"l1": 20, "l2": 20, "sem": 20}
 	num_reps = {"l1": 208, "l2": 120, "sem": 81}
 
-	UTBA18_noise_amount = {'l1l2': 0, 'sl1': 3, 'sl2': 3}
+	UTBA18_noise_amount = {'l1l2': 0, 'sl1': 0.5, 'sl2': 0.5}
 	BUBA01_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
 	UTBA20_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
 	UTBA21_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}

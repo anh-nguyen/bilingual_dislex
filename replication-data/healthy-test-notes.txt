@@ -1,0 +1,17 @@
+Numbers are number of words that share an unit, and are therefore counted as incorrect.
+
+UTBA18
+Spanish incorrect: 2 + bench
+English incorrect: 2
+
+BUBA01:
+Spanish: 2 + bench + comb
+English: 0
+
+UTBA20: 
+Spanish: 5
+English: 5
+
+UTBA21:
+Spanish: 2 + latch + racquet
+English: 2

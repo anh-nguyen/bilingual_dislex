@@ -4,7 +4,16 @@ Each entry has the noise amount / Gaussian variance between associations, follow
 
 UTBA18
 
-Target: Eng 0.28 (~ 17 correct)		Spanish 0.32 (~ 19 correct)
+Target: Spanish 0.32 (~ 19 correct)	Eng 0.28 (~ 17 correct)
 
 L1L2: 0		SL1: 3		SL2: 3
-Eng: 		Es:
+Span: 1		Eng: 3		
+
+L1L2: 0		SL1: 1		SL2: 1
+Span: 4		Eng: 1	
+
+L1L2: 0		SL1: 0.25	SL2: 0.25
+Span: 30	Eng: 30
+
+L1L2: 0		SL1: 0.5	SL2: 0.5
+Span: 	Eng: 
