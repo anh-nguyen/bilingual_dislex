@@ -69,7 +69,7 @@ if __name__ == "__main__":
 	map_sizes = {"l1": 20, "l2": 20, "sem": 20}
 	num_reps = {"l1": 208, "l2": 120, "sem": 81}
 
-	UTBA18_noise_amount = {'l1l2': 0, 'sl1': 0.3, 'sl2': 0.35}
+	UTBA18_noise_amount = {'l1l2': 0, 'sl1': 0.32, 'sl2': 0.33}
 	BUBA01_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
 	UTBA20_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
 	UTBA21_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
