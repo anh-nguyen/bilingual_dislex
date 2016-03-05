@@ -16,4 +16,16 @@ L1L2: 0		SL1: 0.25	SL2: 0.25
 Span: 30	Eng: 30
 
 L1L2: 0		SL1: 0.5	SL2: 0.5
-Span: 	Eng: 
+Span: 6		Eng: 6
+
+L1L2: 0		SL1: 0.3	SL2: 0.3
+Span: 19 	Eng: 22
+
+L1L2: 0		SL1: 0.3	SL2: 0.32
+Span: 19	Eng: 24
+
+L1L2: 0		SL1: 0.3	SL2: 0.4
+Span: 18	Eng: 10
+
+L1L2: 0		SL1: 0.3	SL2: 0.35
+Span: 		Eng: 
