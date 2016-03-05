@@ -1,0 +1,10 @@
+Each patient file is followed by the target correct percentages after lesioning.
+Each entry has the noise amount / Gaussian variance between associations, followed by number of correct answers in both languages.
+
+
+UTBA18
+
+Target: Eng 0.28 (~ 17 correct)		Spanish 0.32 (~ 19 correct)
+
+L1L2: 0		SL1: 3		SL2: 3
+Eng: 		Es:

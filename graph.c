@@ -764,7 +764,6 @@ init_lex_display (modi, nnet, nwords, words, nrep, units)
 
   /* display map activity */
   display_lex (modi, units, nnet);
-
   /* display the log line */
   sprintf(net[modi].log, "%s", "");
   display_log (modi);
@@ -812,7 +811,9 @@ resize_lex (w, client_data, call_data)
   net[modi].uhght = (net[modi].height - titleboxhght - VERSP) / nnet;
   net[modi].uwidth = (net[modi].width - 2 * HORSP) / nnet;
 
-  net[modi].maxlabels = net[modi].uhght / fontstruct->ascent;
+  /* just have the max number of labels possible instead of limiting by display size */
+  /* net[modi].maxlabels = net[modi].uhght / fontstruct->ascent; */
+  net[modi].maxlabels = MAXFMLABELS;
 
   /* horizontal margin from the edge of the window */
   net[modi].marg = (net[modi].width - nnet * net[modi].uwidth) / 2;
