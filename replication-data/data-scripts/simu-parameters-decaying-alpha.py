@@ -47,7 +47,7 @@ def make_simu_data (patient_file, last_epoch, alpha, starting_radius, l2, l2_sta
 			 	else: 
 			 		map_ncs[m].append(ceil(starting_radius*(exp((0-i)/time_constant))))
 
-			if m == l2 and i + 155 < l2_start_epoch:
+			if m == l2 and i < l2_start_epoch:
 				map_running[m].append(0)
 			else:
 			 	map_running[m].append(1)
@@ -95,7 +95,7 @@ if __name__ == "__main__":
 	make_simu_data("UTBA18.txt", 1400, 0.25, 3, "l2", 180, ["l1", "l2", "sem"], ["l1l2", "sl1", "sl2"])
 	make_simu_data("BUBA01.txt", 800, 0.25, 3, "l2", 180, ["l1", "l2", "sem"], ["l1l2", "sl1", "sl2"])
 	make_simu_data("UTBA20.txt", 1700, 0.25, 3, "l2", 300, ["l1", "l2", "sem"], ["l1l2", "sl1", "sl2"])
-	make_simu_data("UTBA21.txt", 1700, 0.25, 3, "l2", 10, ["l1", "l2", "sem"], ["l1l2", "sl1", "sl2"])
+	make_simu_data("UTBA21.txt", 1700, 0.25, 3, "l2", 100, ["l1", "l2", "sem"], ["l1l2", "sl1", "sl2"])
 
 
 
