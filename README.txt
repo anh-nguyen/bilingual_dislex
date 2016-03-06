@@ -1,3 +1,13 @@
+Bilingual DISLEX
+=================================
+This was created to replicate the experiment and the results from Kiran, Grasemann, Sandberg, Miikkulainen (2013)’s paper: http://nn.cs.utexas.edu/?kiran:bilingual13, as part of my senior thesis at Haverford. 
+
+IT IS NOT AT ALL WELL DOCUMENTED.
+
+=================================
+
+Original DISLEX README:
+
 DISLEX: The DISCERN lexicon model
 =================================
 Version 2.1 1/3/99
