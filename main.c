@@ -1282,7 +1282,7 @@ WORDSTRUCT **words;			/* lexicon pointer*/
 int *nrep,				/* representation size */
   *nwords;				/* number of words */
 {
-  if (modi == SINPMOD && modi == SOUTMOD)
+  if (modi == SINPMOD || modi == SOUTMOD)
     /* it is semantic */
     {
       *words = swords;
@@ -1290,7 +1290,7 @@ int *nrep,				/* representation size */
       *nwords = nswords;
       return (SEMWINMOD);
     }
-  else if (modi == L1INPMOD && modi == L1OUTMOD)
+  else if (modi == L1INPMOD || modi == L1OUTMOD)
     /* it is L1 */
     {
       *words = l1words;
