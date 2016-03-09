@@ -183,67 +183,78 @@ print_stats (epoch)
 }
 
 void 
-print_assoc_stats(verbose)
+print_assoc_stats()
   /* mimics BNT -- only test for 60 word items */
   /* test if correct units in L1 and L2 light up when a sem word is selected */
-    bool verbose;   /* whether to print out wrong word pair results */
 {
-   chars[MAXWORDL] result[nswords][3];
-   int s_i, s_j, i, j, besti, bestj, label_index, pair_index, x, l1_index, l2_index;
+   int s_i, s_j, i, j, besti, bestj, label_index, x, pair_index, l1_index, l2_index, s_index;
    int l1_correct = 0;
    int l2_correct = 0;
    double best = (-1), foo = (-1); /* best and worst response found */
+   int result_s_indexes[MAXWORDS];
 
    printf("Wrong pairs: \n");
 
    /* for each unit with a label in the sem map, find the L1 and L2 units with max response */
-   for (s_i = 0; i < nsnet; i++) {
-      for (s_j = 0; j < nsnet; j++) {
-          if (sunits[s_i][s_j].labelcount > 0) {
-            for (label_index = 0; label_index < sunits[s_i][s_j].labelcount; label_index++) {
-              for (x = 0; x < npairs; x++) {
-                if (strcmp(swords[pairs[x].sindex], sunits[s_i][s_j].label[label_index]) == 0) {
-                  pair_index = x;
-                  break;
-                }
+   for (s_i = 0; s_i < nsnet; s_i++) {
+      for (s_j = 0; s_j < nsnet; s_j++) {
+            s_index = find_nearest (sunits[s_i][s_j].comp, swords, nsrep, nswords);
+            if (result_s_indexes[s_index] == 1) {
+              break;
+            }
+            for (pair_index = 0; pair_index < npairs; pair_index++) {
+              if (strcmp(swords[pairs[pair_index].sindex].chars, swords[s_index].chars) == 0) {
+                break;
               }
+            }
 
               /* find index of best-matching l1 word */
+              best = (-1);
+              foo = (-1);
               for (i = 0; i < nl1net; i++)
                 for (j = 0; j < nl1net; j++)
                   {
                     l1units[i][j].prevvalue = l1units[i][j].value;
-                    l1units[i][j].value = assoc[s_j][s_j][i][j];
+                    l1units[i][j].value = sl1assoc[s_j][s_j][i][j];
                     updatebestworst (&best, &foo, &besti, &bestj, &l1units[i][j],
                          i, j, fgreater, fsmaller);
                   }
 
-                  l1_index = find_nearest (l1units[besti][bestj].comp, l1words, nl1rep, nl1words)];
+              l1_index = find_nearest (l1units[besti][bestj].comp, l1words, nl1rep, nl1words);
 
               /* find index of best-matching l2 word */
+              best = (-1);
+              foo = (-1);
               for (i = 0; i < nl2net; i++)
                 for (j = 0; j < nl2net; j++)
                   {
                     l2units[i][j].prevvalue = l2units[i][j].value;
-                    l2units[i][j].value = assoc[s_j][s_j][i][j];
+                    l2units[i][j].value = sl2assoc[s_j][s_j][i][j];
                     updatebestworst (&best, &foo, &besti, &bestj, &l2units[i][j],
                          i, j, fgreater, fsmaller);
                   }
 
-                  l2_index = find_nearest (l2units[besti][bestj].comp, l2words, nl2rep, nl2words)];
+              l2_index = find_nearest (l2units[besti][bestj].comp, l2words, nl2rep, nl2words);
 
               if (l1_index != pairs[pair_index].l1index || l2_index != pairs[pair_index].l2index) {
-                  printf("%s\t%s\t%s\n", swords[pairs[pair_index].sindex], l1words[l1_index], l2words[l2_index]);
+                  printf("%s\t%s\t%s\n", swords[s_index].chars, l1words[l1_index].chars, l2words[l2_index].chars);
               } else {
-                  l1_correct++;
-                  l2_correct++;
+                  if (l1_index == pairs[pair_index].l1index) {
+                    l1_correct = l1_correct + 1;                    
+                  } 
+                  if (l2_index == pairs[pair_index].l2index) {
+                    l2_correct = l2_correct + 1;                    
+                  }
+                  result_s_indexes[s_index] = 1;
+                  printf("Correct: %s\t%s\t%s\n", swords[pairs[pair_index].sindex].chars, l1words[l1_index].chars, l2words[l2_index].chars);
               }
-            }
-          }
+            
+          
       }
    }
 
-   printf("\nL1 correct: %s/%s (%lf%)\tL2 correct: %s/%s (%lf%")
+   printf("\nL1 correct: %d/%d (%.2f%%)\n", l1_correct, nl1words, 100.0 * (double) ((double)l1_correct/(double)nl1words));
+   printf("L2 correct: %d/%d (%.2f%%)\n", l2_correct, nl2words, 100.0 * (double) ((double)l2_correct/(double)nl2words));
 }
 
 
