@@ -178,6 +178,67 @@ print_stats (epoch)
 	      /* average error per output unit */
 	      reszero (deltasum[modi], sum_all * nrep));
     }
+  printf ("\n");
+  print_assoc_stats();
+}
+
+void 
+print_assoc_stats(verbose)
+  /* mimics BNT -- only test for 60 word items */
+  /* test if correct units in L1 and L2 light up when a sem word is selected */
+    bool verbose;   /* whether to print out wrong word pair results */
+{
+   chars[MAXWORDL] result[nswords][3];
+   int s_i, s_j, i, j, besti, bestj, label_index, pair_index, x, l1_index, l2_index;
+   int result_index = 0;
+   int l1_correct, l2_correct;
+   double best = (-1), foo = (-1); /* best and worst response found */
+
+   printf("Wrong pairs: \n");
+
+   /* for each unit with a label in the sem map, find the L1 and L2 units with max response */
+   for (s_i = 0; i < nsnet; i++) {
+      for (s_j = 0; j < nsnet; j++) {
+          if (sunits[s_i][s_j].labelcount > 0) {
+            for (label_index = 0; label_index < sunits[s_i][s_j].labelcount; label_index++) {
+              for (x = 0; x < npairs; x++) {
+                if (strcmp(swords[pairs[x].sindex], sunits[s_i][s_j].label[label_index]) == 0) {
+                  pair_index = x;
+                  break;
+                }
+              }
+
+              /* find index of best-matching l1 word */
+              for (i = 0; i < nl1net; i++)
+                for (j = 0; j < nl1net; j++)
+                  {
+                    l1units[i][j].prevvalue = l1units[i][j].value;
+                    l1units[i][j].value = assoc[s_j][s_j][i][j];
+                    updatebestworst (&best, &foo, &besti, &bestj, &l1units[i][j],
+                         i, j, fgreater, fsmaller);
+                  }
+
+                  l1_index = find_nearest (l1units[besti][bestj].comp, l1words, nl1rep, nl1words)];
+
+              /* find index of best-matching l2 word */
+              for (i = 0; i < nl2net; i++)
+                for (j = 0; j < nl2net; j++)
+                  {
+                    l2units[i][j].prevvalue = l2units[i][j].value;
+                    l2units[i][j].value = assoc[s_j][s_j][i][j];
+                    updatebestworst (&best, &foo, &besti, &bestj, &l2units[i][j],
+                         i, j, fgreater, fsmaller);
+                  }
+
+                  l2_index = find_nearest (l2units[besti][bestj].comp, l2words, nl2rep, nl2words)];
+
+              if (l1_index != pairs[pair_index].l1index || l2_index != pairs[pair_index].l2index) {
+
+              }
+            }
+          }
+      }
+   }
 }
 
 

@@ -71,18 +71,18 @@ if __name__ == "__main__":
 
 	UTBA18_noise_amount = {'l1l2': 0, 'sl1': 0.32, 'sl2': 0.33}
 	BUBA01_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
-	UTBA20_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
-	UTBA21_noise_amount = {'l1l2': 0, 'sl1': 0, 'sl2': 0}
+	UTBA20_noise_amount = {'l1l2': 0, 'sl1': 3, 'sl2': 3}
+	UTBA21_noise_amount = {'l1l2': 0, 'sl1': 2, 'sl2': 2}
 
-	UTBA18_overwrite = True
+	UTBA18_overwrite = False
 	BUBA01_overwrite = False
 	UTBA20_overwrite = False
-	UTBA21_overwrite = False
+	UTBA21_overwrite = True
 
-	lesion_assocs("../../UTBA18-simu", "../../UTBA18-lesioned-simu", map_sizes, num_reps, UTBA18_noise_amount, UTBA18_overwrite)
+	#lesion_assocs("../../UTBA18-simu", "../../UTBA18-lesioned-simu", map_sizes, num_reps, UTBA18_noise_amount, UTBA18_overwrite)
 	#lesion_assocs("../../BUBA01-simu", "../../BUBA01-lesioned-simu", map_sizes, num_reps, BUBA01_noise_amount, BUBA01_overwrite)
 	#lesion_assocs("../../UTBA20-simu", "../../UTBA20-lesioned-simu", map_sizes, num_reps, UTBA20_noise_amount, UTBA20_overwrite)
-	#lesion_assocs("../../UTBA21-simu", "../../UTBA21-lesioned-simu", map_sizes, num_reps, UTBA21_noise_amount, UTBA21_overwrite)
+	lesion_assocs("../../UTBA21-simu", "../../UTBA21-lesioned-simu", map_sizes, num_reps, UTBA21_noise_amount, UTBA21_overwrite)
 
 
 

@@ -886,6 +886,7 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
       uniti = (x - net[srcmodi].marg) / net[srcmodi].uwidth;
       unitj = (y - titleboxhght) / net[srcmodi].uhght;
 
+    printf("hi -1 \n");
       /* turn it and it alone on in the source map */
       for (i = 0; i < nsrcnet; i++)
 	for (j = 0; j < nsrcnet; j++)
@@ -903,6 +904,7 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
 
       display_log (srcmodi);
 
+  printf("hi0 \n");
       /* establish values to be displayed as activations on the assoc map */
       /* find and display the label of the closest word in the lexicon */
       for (i = 0; i < ntgtnet; i++)
@@ -913,12 +915,16 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
 	    updatebestworst (&best, &foo, &besti, &bestj, &tgtunits[i][j],
 			     i, j, fgreater, fsmaller);
 	  }
-
+    printf("hi1 \n");
       display_lex (tgtmodi, tgtunits, ntgtnet);
+    printf("hi1a \n");
       sprintf (net[tgtmodi].log, "Assoc weights: %s",
 	       tgtwords[find_nearest (tgtunits[besti][bestj].comp,
 				      tgtwords, ntgtrep, ntgtwords)].chars);
+
+    printf("hi1b \n");
       display_log (tgtmodi);
+    printf("hi2 \n");
     }
 }
 
@@ -966,6 +972,7 @@ display_lex (modi, units, nnet)
       currbGC = sembGC;
       currnGC = semnGC;
     }
+
   /* here i and j are not switched like in discern */
   for (i = 0; i < nnet; i++)
     for (j = 0; j < nnet; j++)
@@ -977,6 +984,8 @@ display_lex (modi, units, nnet)
 			  titleboxhght + j * net[modi].uhght,
 			  net[modi].uwidth, net[modi].uhght,
 			  trans_to_color (units[i][j].value, UNITCOLORS));
+
+    printf("display_lex 1 \n");
 	  /* display the list of labels on the box */
 	  labelbox (modi, net[modi].marg + i * net[modi].uwidth,
 		    titleboxhght + j * net[modi].uhght,
@@ -984,7 +993,9 @@ display_lex (modi, units, nnet)
 		    units[i][j].value, units[i][j].labels,
 		    units[i][j].labelcount, fontstruct,
 		    currfGC, currbGC, currnGC);
+    printf("display_lex 3 \n");
 	}
+    printf("display_lex 2 \n");
   XFlush (theDisplay);
 }
 
@@ -1155,6 +1166,8 @@ trans_to_color (value, map)
 {
   if (map == UNITCOLORS) {
     /* map the number [0,1] to corresponding color */
+    printf("return value of trans_to_color: %d\n", ((actual_color_range - 1) * value) + 0.499999);
+
     return ((long) (((actual_color_range - 1) * value) + 0.499999)); }
   else
     {
@@ -1180,7 +1193,9 @@ fillRectangle (modi, x, y, width, height, colorindex)
 /* draw a filled rectangle in given color */
      int modi, x, y, width, height, colorindex;
 { 
-  XSetForeground (theDisplay, activityGC, colors[cmap[colorindex]].pixel);
+  printf("cmap[colorindex] = %d\n", cmap[colorindex]);
+  printf("colors[cmap[colorindex]].pixel = %ld\n", (long) colors[cmap[colorindex]].pixel);
+  XSetForeground (theDisplay, activityGC, (long) colors[cmap[colorindex]].pixel);
   XFillRectangle (theDisplay, Win[modi], activityGC, x, y, width, height);
 }
 
