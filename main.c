@@ -1503,6 +1503,25 @@ find_nearest (rep, words, nrep, nwords)
   return (bestindex);
 }
 
+void 
+find_closest_unit(i, j, nnet, units, words, word_index, nrep)
+  int *i, *j;
+  int nnet, word_index, nrep;
+  FMUNIT units[MAXLSNET][MAXLSNET];
+  WORDSTRUCT words[MAXWORDS];
+{
+  int u_i, u_j;
+  double current_distance = (double) LARGEFLOAT;
+  for (u_i = 0; u_i < nnet; u_i++) {
+    for (u_j = 0; u_j < nnet; u_j++) {
+      double distance = distance(NULL, words[word_index].rep, units[u_i][u_j].comp, nrep)
+      if distance < current_distance:
+        *i = u_i;
+        *j = u_j;
+        current_distance = distance;
+    }
+  }
+}
 
 double
 distance (foo, v1, v2, nrep)
