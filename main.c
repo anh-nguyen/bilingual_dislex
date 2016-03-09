@@ -1514,11 +1514,12 @@ find_closest_unit(i, j, nnet, units, words, word_index, nrep)
   double current_distance = (double) LARGEFLOAT;
   for (u_i = 0; u_i < nnet; u_i++) {
     for (u_j = 0; u_j < nnet; u_j++) {
-      double distance = distance(NULL, words[word_index].rep, units[u_i][u_j].comp, nrep)
-      if distance < current_distance:
+      double d = distance(NULL, words[word_index].rep, units[u_i][u_j].comp, nrep);
+      if (d < current_distance) {
         *i = u_i;
         *j = u_j;
-        current_distance = distance;
+        current_distance = d;
+      }
     }
   }
 }

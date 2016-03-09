@@ -190,22 +190,17 @@ print_assoc_stats()
    int s_i, s_j, i, j, besti1, bestj1, besti2, bestj2, label_index, pair_index, l1_index, l2_index, s_index;
    int l1_correct = 0;
    int l2_correct = 0;
-   double best, foo, best, foo; /* best and worst response found */
+   double best, foo; /* best and worst response found */
 
    printf("Wrong pairs: \n");
 
-   /* NEW WAY TO DO THIS: */
-   /*   for each sindex, use a new function to find closest matching unit by rep values */
-   /*   use that unit to do stuff */
-
-
    /* for each unit with a label in the sem map, find the L1 and L2 units with max response */
-   for (s_index = 0; s_index < nswords; s_index++) {
-      find_closest_unit(s_i, s_j, nsnet, sunits, swords, s_index, nsrep);
 
+   for (s_index = 0; s_index < nswords; s_index++) {
+      find_closest_unit(&s_i, &s_j, nsnet, sunits, swords, s_index, nsrep);
       /* find the pair containing the semantic word */
       for (pair_index = 0; pair_index < npairs; pair_index++) {
-        if (!strcmp(swords[pairs[pair_index].sindex].chars, swords[s_index].chars)) {
+        if (pairs[pair_index].sindex == s_index) {
           break;
         }
       }
