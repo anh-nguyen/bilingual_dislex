@@ -190,8 +190,8 @@ print_assoc_stats(verbose)
 {
    chars[MAXWORDL] result[nswords][3];
    int s_i, s_j, i, j, besti, bestj, label_index, pair_index, x, l1_index, l2_index;
-   int result_index = 0;
-   int l1_correct, l2_correct;
+   int l1_correct = 0;
+   int l2_correct = 0;
    double best = (-1), foo = (-1); /* best and worst response found */
 
    printf("Wrong pairs: \n");
@@ -233,12 +233,17 @@ print_assoc_stats(verbose)
                   l2_index = find_nearest (l2units[besti][bestj].comp, l2words, nl2rep, nl2words)];
 
               if (l1_index != pairs[pair_index].l1index || l2_index != pairs[pair_index].l2index) {
-
+                  printf("%s\t%s\t%s\n", swords[pairs[pair_index].sindex], l1words[l1_index], l2words[l2_index]);
+              } else {
+                  l1_correct++;
+                  l2_correct++;
               }
             }
           }
       }
    }
+
+   printf("\nL1 correct: %s/%s (%lf%)\tL2 correct: %s/%s (%lf%")
 }
 
 
