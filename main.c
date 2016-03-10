@@ -1508,10 +1508,10 @@ find_closest_unit(i, j, nnet, units, words, word_index, nrep)
   int *i, *j;
   int nnet, word_index, nrep;
   FMUNIT units[MAXLSNET][MAXLSNET];
-  WORDSTRUCT words[MAXWORDS];
+  WORDSTRUCT words[];
 {
   int u_i, u_j;
-  double current_distance = (double) LARGEFLOAT;
+  double current_distance = LARGEFLOAT;
   for (u_i = 0; u_i < nnet; u_i++) {
     for (u_j = 0; u_j < nnet; u_j++) {
       double d = distance(NULL, words[word_index].rep, units[u_i][u_j].comp, nrep);

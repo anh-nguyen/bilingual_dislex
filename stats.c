@@ -187,24 +187,29 @@ print_assoc_stats()
   /* mimics BNT -- only test for 60 word items */
   /* test if correct units in L1 and L2 light up when a sem word is selected */
 {
-   int s_i, s_j, i, j, besti1, bestj1, besti2, bestj2, label_index, pair_index, l1_index, l2_index, s_index;
+   int s_i, s_j, i, j, besti, bestj, label_index, pair_index, l1_index, l2_index, s_index;
    int l1_correct = 0;
    int l2_correct = 0;
    double best, foo; /* best and worst response found */
 
-   printf("Wrong pairs: \n");
+   printf("Word pairs: \n");
 
    /* for each unit with a label in the sem map, find the L1 and L2 units with max response */
 
    for (s_index = 0; s_index < nswords; s_index++) {
       find_closest_unit(&s_i, &s_j, nsnet, sunits, swords, s_index, nsrep);
+
       /* find the pair containing the semantic word */
       for (pair_index = 0; pair_index < npairs; pair_index++) {
         if (pairs[pair_index].sindex == s_index) {
           break;
         }
       }
-
+      
+      printf("sunits[s_i][s_j].labels: %s\n", sunits[s_i][s_j].labels);
+      printf("swords: %s\n", swords[pairs[pair_index].sindex].chars);
+      printf("s_index: %d\n", s_index);
+      printf("s_i: %d, s_j: %d\n", s_i, s_j);
       /* find index of best-matching l1 word */
       best = (-1);
       foo = (-1);
@@ -213,11 +218,14 @@ print_assoc_stats()
           {
             l1units[i][j].prevvalue = l1units[i][j].value;
             l1units[i][j].value = sl1assoc[s_j][s_j][i][j];
-            updatebestworst (&best, &foo, &besti1, &bestj1, &l1units[i][j],
+            updatebestworst (&best, &foo, &besti, &bestj, &l1units[i][j],
                  i, j, fgreater, fsmaller);
           }
         }
-      l1_index = find_nearest (l1units[besti1][bestj1].comp, l1words, nl1rep, nl1words);
+      l1_index = find_nearest (l1units[besti][bestj].comp, l1words, nl1rep, nl1words);
+      printf("%s\n", l1units[besti][bestj].labels);
+      printf("l1 index: %d\n", l1_index);
+      printf("l1 besti: %d, l1 bestj: %d\n", besti, bestj);
 
       /* find index of best-matching l2 word */
       best = (-1);
@@ -227,11 +235,14 @@ print_assoc_stats()
           {
             l2units[i][j].prevvalue = l2units[i][j].value;
             l2units[i][j].value = sl2assoc[s_j][s_j][i][j];
-            updatebestworst (&best, &foo, &besti2, &bestj2, &l2units[i][j],
+            updatebestworst (&best, &foo, &besti, &bestj, &l2units[i][j],
                  i, j, fgreater, fsmaller);
           }
         }
-      l2_index = find_nearest (l2units[besti2][bestj2].comp, l2words, nl2rep, nl2words);
+      l2_index = find_nearest (l2units[besti][bestj].comp, l2words, nl2rep, nl2words);
+      printf("%s\n", l2units[besti][bestj].labels);
+      printf("l2 index: %d\n", l2_index);
+      printf("l2 besti: %d, l2 bestj: %d\n", besti, bestj);
 
       printf("%s\t%s\t%s\n", swords[s_index].chars, l1words[l1_index].chars, l2words[l2_index].chars);
       
