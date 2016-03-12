@@ -896,11 +896,6 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
       srcunits[uniti][unitj].value = 1.0;
       display_lex (srcmodi, srcunits, nsrcnet);
 
-      printf("uniti: %d, unitj %d \n", uniti, unitj);
-      printf("sindex for %s is %d\n", srcwords[find_nearest (srcunits[uniti][unitj].comp,
-              srcwords, nsrcrep, nsrcwords)].chars, find_nearest (srcunits[uniti][unitj].comp,
-              srcwords, nsrcrep, nsrcwords));
-
       /* find and display the label of the closest word in the lexicon */
       sprintf (net[srcmodi].log, "Source unit: %s",
 	       srcwords[find_nearest (srcunits[uniti][unitj].comp,
@@ -918,7 +913,6 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
 	    updatebestworst (&best, &foo, &besti, &bestj, &tgtunits[i][j],
 			     i, j, fgreater, fsmaller);
 	  }
-      printf("best assoc value is: %f\n", best);
       display_lex (tgtmodi, tgtunits, ntgtnet);
 
       sprintf (net[tgtmodi].log, "Assoc weights: %s",
