@@ -450,7 +450,8 @@ test_snapshot (epoch)
   get_current_params (epoch);	/* current learning rates and neighborhoods */
   init_stats ();
   iterate_pairs ();		/* run through the test set */
-  print_stats (epoch);    /* performance statistics */
+  /* print_stats (epoch);    /* performance statistics - unnecessary for bilingual DISLEX */
+  print_assoc_stats();  /* test assoc connections from sem map */
 }
 
 

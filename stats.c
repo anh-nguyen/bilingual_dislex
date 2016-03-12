@@ -178,8 +178,6 @@ print_stats (epoch)
 	      /* average error per output unit */
 	      reszero (deltasum[modi], sum_all * nrep));
     }
-  printf ("\n");
-  print_assoc_stats();
 }
 
 void 
