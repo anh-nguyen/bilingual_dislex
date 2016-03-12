@@ -918,6 +918,7 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
 	    updatebestworst (&best, &foo, &besti, &bestj, &tgtunits[i][j],
 			     i, j, fgreater, fsmaller);
 	  }
+      printf("best assoc value is: %f\n", best);
       display_lex (tgtmodi, tgtunits, ntgtnet);
 
       sprintf (net[tgtmodi].log, "Assoc weights: %s",
@@ -926,6 +927,7 @@ display_assocweights (srcmodi, srcunits, nsrcnet, srcwords, nsrcrep, nsrcwords,
 
       display_log (tgtmodi);
     }
+
 }
 
 

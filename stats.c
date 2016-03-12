@@ -210,18 +210,26 @@ print_assoc_stats()
       printf("swords: %s\n", swords[pairs[pair_index].sindex].chars);
       printf("s_index: %d\n", s_index);
       printf("s_i: %d, s_j: %d\n", s_i, s_j);
+
       /* find index of best-matching l1 word */
       best = (-1);
       foo = (-1);
-      for (i = 0; i < nl1net; i++) {
+      for (i = 0; i < nl1net; i++)
         for (j = 0; j < nl1net; j++)
           {
             l1units[i][j].prevvalue = l1units[i][j].value;
-            l1units[i][j].value = sl1assoc[s_j][s_j][i][j];
+            printf("inside l1 loop: s_i: %d, s_j: %d\n", s_i, s_j);
+            l1units[i][j].value = sl1assoc[s_i][s_j][i][j];
+            if (l1units[i][j].value > 0.472282 && s_index == 59) {
+              printf ("assoc value > 0.472282 = %f \n", l1units[i][j].value);
+              printf ("i = %d, j = %d\n", i, j);
+
+            }
             updatebestworst (&best, &foo, &besti, &bestj, &l1units[i][j],
                  i, j, fgreater, fsmaller);
           }
-        }
+      
+      printf("best l1 assoc value is: %f\n", best);
       l1_index = find_nearest (l1units[besti][bestj].comp, l1words, nl1rep, nl1words);
       printf("%s\n", l1units[besti][bestj].labels);
       printf("l1 index: %d\n", l1_index);
@@ -230,15 +238,15 @@ print_assoc_stats()
       /* find index of best-matching l2 word */
       best = (-1);
       foo = (-1);
-      for (i = 0; i < nl2net; i++) {
+      for (i = 0; i < nl2net; i++)
         for (j = 0; j < nl2net; j++)
           {
             l2units[i][j].prevvalue = l2units[i][j].value;
-            l2units[i][j].value = sl2assoc[s_j][s_j][i][j];
+            l2units[i][j].value = sl2assoc[s_i][s_j][i][j];
             updatebestworst (&best, &foo, &besti, &bestj, &l2units[i][j],
                  i, j, fgreater, fsmaller);
           }
-        }
+      
       l2_index = find_nearest (l2units[besti][bestj].comp, l2words, nl2rep, nl2words);
       printf("%s\n", l2units[besti][bestj].labels);
       printf("l2 index: %d\n", l2_index);

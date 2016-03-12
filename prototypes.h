@@ -17,7 +17,7 @@
 int find_nearest __P((double rep[], WORDSTRUCT words[],
 		      int nrep, int nwords));
 void find_closest_unit __P ((int *i, int *j, int nnet, FMUNIT units[MAXLSNET][MAXLSNET], 
-				WORDSTRUCT words[MAXWORDS], int word_index, int nrep));
+				WORDSTRUCT words[], int word_index, int nrep));
 double distance __P((int *foo, double v1[], double v2[], int nrep));
 int select_lexicon __P ((int modi, WORDSTRUCT **words,
 			 int *nrep, int *nwords));

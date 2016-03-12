@@ -291,7 +291,7 @@ jmp_buf loop_map_env;	/* jump here from after interrupt */
 
 /*********************  main processing loops ******************************/
 
-void
+int
 main (argc, argv)
 /* initialize X display, system parameters, read inputs, process them */
      int argc;
@@ -323,6 +323,7 @@ main (argc, argv)
   init_system ();
   run_simulation ();
   exit (EXIT_NORMAL);
+  return 0;
 }
 
 
@@ -435,6 +436,7 @@ read_and_process_snapshots (epoch)
       if (testing)
 	/* run through the test set: display and collect stats */
 	test_snapshot (*epoch);
+  
     }
   fclose (fp);
 }
@@ -448,7 +450,7 @@ test_snapshot (epoch)
   get_current_params (epoch);	/* current learning rates and neighborhoods */
   init_stats ();
   iterate_pairs ();		/* run through the test set */
-  print_stats (epoch);		/* performance statistics */
+  print_stats (epoch);    /* performance statistics */
 }
 
 
