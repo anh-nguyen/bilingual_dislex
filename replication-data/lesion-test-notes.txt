@@ -5,38 +5,8 @@ Each entry has the noise amount / Gaussian variance between associations, follow
 UTBA18
 	Target: Spanish 0.32 (~ 19 correct)	Eng 0.28 (~ 17 correct)
 
-	L1L2: 0		SL1: 3		SL2: 3
-	Span: 1		Eng: 3		
-
-	L1L2: 0		SL1: 1		SL2: 1
-	Span: 4		Eng: 1	
-
-	L1L2: 0		SL1: 0.25	SL2: 0.25
-	Span: 30	Eng: 30
-
-	L1L2: 0		SL1: 0.5	SL2: 0.5
-	Span: 6		Eng: 6
-
-	L1L2: 0		SL1: 0.3	SL2: 0.3
-	Span: 19 	Eng: 22
-
-	L1L2: 0		SL1: 0.3	SL2: 0.32
-	Span: 19	Eng: 24
-
-	L1L2: 0		SL1: 0.3	SL2: 0.4
-	Span: 18	Eng: 10
-
-	L1L2: 0		SL1: 0.3	SL2: 0.35
-	Span: 19	Eng: 13
-
-	L1L2: 0		SL1: 0.3	SL2: 0.33
-	Span: 22	Eng: 16
-
-	L1L2: 0		SL1: 0.32	SL2: 0.32
-	Span: 19	Eng: 24
-
-	L1L2: 0		SL1: 0.32	SL2: 0.33
-	Span: 	Eng: 
+	L1L2: 0		SL1: 1 		SL2: 1
+	Span:		Eng:
 
 
 BUBA01
@@ -55,17 +25,18 @@ UTBA20
 	L1L2: 0		SL1: 2.2		SL2: 2.2
 	Span: 1		Eng: 2	
 
-	*L1L2: 0		SL1: 3 			SL2: 3
+	*L1L2: 0	SL1: 3 			SL2: 3
 	Span: 0		Eng: 0	
 
 
 
 UTBA21
-	Target: Spanish 0.01 (~ 1 correct)	Eng 0.00 (~ 0 correct)
+	Target: Spanish 0.00 (~ 0 correct)	Eng 0.01 (~ 1 correct)
 
-	L1L2: 0		SL1: 		SL2: 
-	Span: 		Eng: 		
+	L1L2: 0		SL1: 2		SL2: 2
+	Span: 1		Eng: 1		
 
-
+	*L1L2: 0		SL1: 2		SL2: 2.3
+	Span: 0		Eng: 1
 
 
