@@ -6,7 +6,19 @@ UTBA18
 	Target: Spanish 0.32 (~ 19 correct)	Eng 0.28 (~ 17 correct)
 
 	L1L2: 0		SL1: 1 		SL2: 1
-	Span:		Eng:
+	Span: 2		Eng: 1
+
+	L1L2: 0		SL1: 0.2 	SL2: 0.2
+	Span: 41	Eng: 45
+
+	L1L2: 0		SL1: 0.5 	SL2: 0.5
+	Span: 8		Eng: 9
+
+	L1L2: 0		SL1: 0.3 	SL2: 0.3
+	Span: 19	Eng: 23
+
+	L1L2: 0		SL1: 0.3 	SL2: 0.32
+	Span: 20	Eng: 17
 
 
 BUBA01
